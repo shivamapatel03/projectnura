@@ -19,38 +19,14 @@ import {
   Bell,
   ChevronDown,
   ChevronLeft,
-  ChevronRight,
   Plus,
   ArrowUpRight,
   Download,
-  Filter,
   Check,
   Store,
-  Printer,
   Layers,
   X,
-  Calendar,
-  Clock,
-  TrendingUp,
-  AlertTriangle,
-  RotateCcw,
-  Sliders,
-  DollarSign,
-  Smartphone,
-  Eye,
-  Trash2,
   Edit,
-  Power,
-  RefreshCw,
-  Search,
-  ExternalLink,
-  ChevronUp,
-  CheckCircle2,
-  Utensils,
-  ChefHat,
-  Barcode,
-  Truck,
-  ShoppingBag,
 } from "lucide-react";
 
 export type AdminTab =
@@ -209,6 +185,35 @@ const DEVICES_DATA = [
   { id: "D1", name: "D1 Cash Drawer", type: "Cash Drawer", outlet: "Main Branch", status: "Closed", ip: "Direct RJ11", battery: "Connected" },
 ];
 
+// Hourly Bar Chart data for Sales Overview
+const HOURLY_BAR_CHART_DATA = [
+  { time: "9 AM", amount: "₹4,250", orders: 16, heightPct: 28 },
+  { time: "11 AM", amount: "₹7,820", orders: 31, heightPct: 52 },
+  { time: "1 PM", amount: "₹11,640", orders: 45, heightPct: 78 },
+  { time: "3 PM", amount: "₹14,910", orders: 58, heightPct: 100, isPeak: true },
+  { time: "5 PM", amount: "₹6,120", orders: 24, heightPct: 41 },
+  { time: "7 PM", amount: "₹3,780", orders: 10, heightPct: 25 },
+];
+
+const WEEKLY_BAR_CHART_DATA = [
+  { time: "Mon", amount: "₹38,200", orders: 142, heightPct: 65 },
+  { time: "Tue", amount: "₹41,500", orders: 156, heightPct: 72 },
+  { time: "Wed", amount: "₹36,800", orders: 138, heightPct: 60 },
+  { time: "Thu", amount: "₹44,100", orders: 168, heightPct: 78 },
+  { time: "Fri", amount: "₹52,400", orders: 198, heightPct: 92 },
+  { time: "Sat", amount: "₹58,900", orders: 224, heightPct: 100, isPeak: true },
+  { time: "Sun", amount: "₹48,520", orders: 184, heightPct: 83 },
+];
+
+const MONTHLY_BAR_CHART_DATA = [
+  { time: "Jan", amount: "₹1,24,000", orders: 480, heightPct: 62 },
+  { time: "Feb", amount: "₹1,48,500", orders: 590, heightPct: 74 },
+  { time: "Mar", amount: "₹1,96,000", orders: 780, heightPct: 98, isPeak: true },
+  { time: "Apr", amount: "₹1,62,000", orders: 640, heightPct: 81 },
+  { time: "May", amount: "₹1,55,000", orders: 610, heightPct: 77 },
+  { time: "Jun", amount: "₹1,82,000", orders: 720, heightPct: 91 },
+];
+
 export const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
@@ -219,6 +224,32 @@ export const AdminDashboard: React.FC = () => {
   const [isAddProductOpen, setIsAddProductOpen] = useState<boolean>(false);
   const [isPosModalOpen, setIsPosModalOpen] = useState<boolean>(false);
   const [chartTimeframe, setChartTimeframe] = useState<"Today" | "Week" | "Month">("Today");
+  const [hoveredBarIndex, setHoveredBarIndex] = useState<number | null>(null);
+
+  // Startup Guide state
+  const [isStartupGuideDismissed, setIsStartupGuideDismissed] = useState<boolean>(false);
+  const [completedSteps, setCompletedSteps] = useState<{ [key: string]: boolean }>({
+    step1: false, // 01 — Add Products
+    step2: false, // 02 — Add Staff
+    step3: false, // 03 — Set Up POS
+    step4: false, // 04 — Start Selling
+    step5: false, // 05 — Set Up Tables & Kitchen
+  });
+
+  const toggleStep = (stepKey: string) => {
+    setCompletedSteps((prev) => ({
+      ...prev,
+      [stepKey]: !prev[stepKey],
+    }));
+  };
+
+  const completedCount = Object.values(completedSteps).filter(Boolean).length;
+  const isRequiredCompleted =
+    Boolean(completedSteps.step1 &&
+    completedSteps.step2 &&
+    completedSteps.step3 &&
+    completedSteps.step4);
+  const isAllCompleted = completedCount === 5;
 
   // Add Product form state
   const [newProductName, setNewProductName] = useState("");
@@ -242,54 +273,61 @@ export const AdminDashboard: React.FC = () => {
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
+  // Active chart dataset
+  const activeChartData =
+    chartTimeframe === "Today"
+      ? HOURLY_BAR_CHART_DATA
+      : chartTimeframe === "Week"
+      ? WEEKLY_BAR_CHART_DATA
+      : MONTHLY_BAR_CHART_DATA;
+
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-gray-950 flex antialiased selection:bg-black selection:text-white font-sans overflow-x-hidden">
+    <div className="h-screen w-screen bg-[#f8f9fa] text-gray-950 flex antialiased selection:bg-black selection:text-white font-sans overflow-hidden">
       {/* ========================================================================= */}
-      {/* 1. COLLAPSIBLE SIDEBAR WITH ORIGINAL NURADESK LOGO & TOGGLE               */}
+      {/* 1. STICKY COLLAPSIBLE SIDEBAR WITH SMOOTH ANIMATION & CLEAN LOGO          */}
       {/* ========================================================================= */}
       <aside
         className={`${
-          sidebarOpen ? "w-64" : "w-18"
-        } bg-[#0e0e11] border-r border-zinc-800/80 text-white shrink-0 flex flex-col justify-between transition-all duration-300 z-30 select-none overflow-y-auto hidden md:flex`}
+          sidebarOpen ? "w-64" : "w-[72px]"
+        } h-screen sticky top-0 bg-[#0e0e11] border-r border-zinc-800/80 text-white shrink-0 flex flex-col transition-[width] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] z-30 select-none overflow-hidden hidden md:flex`}
       >
-        <div className="p-3 space-y-4">
-          {/* Header with Original Nuradesk Logo & Collapse Toggle */}
+        <div className="p-3 space-y-3 flex-1 flex flex-col min-h-0">
+          {/* Header with Original Nuradesk Logo & Collapse Toggle (No overlap) */}
           {sidebarOpen ? (
-            <div className="flex items-center justify-between px-2 pt-1 pb-1">
-              <Link href="/" className="flex items-center gap-2.5 cursor-pointer group">
-                <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
+            <div className="flex items-center justify-between px-1.5 pt-1 pb-1 shrink-0">
+              <Link href="/" className="flex items-center gap-2.5 cursor-pointer group min-w-0">
+                <div className="relative w-8 h-8 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
                   <Image
                     src="/logo/logo.png.png"
                     alt="Nuradesk"
                     width={32}
                     height={32}
-                    className="object-contain"
+                    className="object-contain brightness-0 invert"
                     priority
                   />
                 </div>
-                <div className="relative w-24 sm:w-28 h-6 sm:h-7 flex items-center justify-center brightness-0 invert">
+                <div className="relative h-6 w-24 sm:w-28 flex items-center">
                   <Image
                     src="/logo/text.png"
                     alt="Nuradesk"
-                    fill
-                    className="object-contain"
+                    width={110}
+                    height={26}
+                    className="object-contain brightness-0 invert"
                     priority
                   />
                 </div>
               </Link>
 
-              {/* Close Sidebar Button */}
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="w-7 h-7 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                title="Close sidebar"
+                className="w-7 h-7 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-all hover:scale-105 cursor-pointer shrink-0"
+                title="Collapse sidebar"
               >
                 <ChevronLeft size={16} />
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-3 pt-1 pb-1">
-              {/* Collapsed Original Logo Mark */}
+            <div className="flex flex-col items-center gap-2.5 pt-1 pb-1 shrink-0">
               <Link
                 href="/"
                 className="relative w-8 h-8 flex items-center justify-center transition-transform hover:scale-105 cursor-pointer"
@@ -300,136 +338,78 @@ export const AdminDashboard: React.FC = () => {
                   alt="Nuradesk"
                   width={32}
                   height={32}
-                  className="object-contain"
+                  className="object-contain brightness-0 invert"
                   priority
                 />
               </Link>
 
-              {/* Open Sidebar Button */}
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="w-7 h-7 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                title="Open sidebar"
+                className="w-7 h-7 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
+                title="Expand sidebar"
               >
-                <ChevronRight size={16} />
+                <ChevronLeft size={16} className="rotate-180" />
               </button>
             </div>
           )}
 
-          {/* Nav Items List (Exact 12 items from image) */}
-          <div className="pt-1">
-            <div className="space-y-1">
+          {/* Nav Items List (Smooth text collapse, fits cleanly without scroll) */}
+          <div className="pt-1 flex-1 overflow-hidden">
+            <div className="space-y-0.5">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
 
-                if (sidebarOpen) {
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id as AdminTab)}
-                      className={`w-full h-10 px-3 rounded-xl text-xs sm:text-[13px] font-medium flex items-center justify-between transition-all cursor-pointer text-left ${
-                        isActive
-                          ? "bg-[#212126] text-white shadow-sm font-semibold border border-zinc-700/50"
-                          : "text-zinc-400 hover:text-white hover:bg-zinc-900/80"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <Icon size={17} className={isActive ? "text-white" : "text-zinc-400"} />
-                        <span className="truncate">{item.label}</span>
-                      </div>
-                    </button>
-                  );
-                }
-
-                // Collapsed State: Centered Icon with Tooltip
                 return (
                   <button
                     key={item.id}
+                    type="button"
                     onClick={() => setActiveTab(item.id as AdminTab)}
-                    className={`w-11 h-10 mx-auto rounded-xl flex items-center justify-center transition-all cursor-pointer relative group ${
+                    className={`w-full h-9 sm:h-[38px] px-3 rounded-xl text-xs sm:text-[13px] font-medium flex items-center transition-all cursor-pointer relative group outline-none focus:outline-none focus-visible:outline-none focus:ring-0 select-none ${
                       isActive
-                        ? "bg-[#212126] text-white shadow-sm border border-zinc-700/60"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-900"
+                        ? "bg-[#212126] text-white font-semibold"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/80"
                     }`}
-                    title={item.label}
+                    title={!sidebarOpen ? item.label : undefined}
                   >
-                    <Icon size={18} className={isActive ? "text-white" : "text-zinc-400"} />
-                    <span className="absolute left-14 bg-zinc-950 text-white text-[11px] font-medium px-2.5 py-1 rounded-md shadow-2xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 border border-zinc-800">
+                    {/* Fixed Icon Anchor */}
+                    <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                      <Icon size={17} className={isActive ? "text-white" : "text-zinc-400"} />
+                    </div>
+
+                    {/* Smoothly Collapsing Label */}
+                    <span
+                      className={`ml-3 truncate whitespace-nowrap transition-all duration-300 ${
+                        sidebarOpen
+                          ? "opacity-100 max-w-[160px] translate-x-0"
+                          : "opacity-0 max-w-0 -translate-x-3 pointer-events-none"
+                      }`}
+                    >
                       {item.label}
                     </span>
+
+                    {/* Floating Tooltip when collapsed */}
+                    {!sidebarOpen && (
+                      <span className="absolute left-[78px] bg-zinc-950 text-white text-[11px] font-medium px-2.5 py-1 rounded-md shadow-2xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 border border-zinc-800">
+                        {item.label}
+                      </span>
+                    )}
                   </button>
                 );
               })}
             </div>
           </div>
         </div>
-
-        {/* Sidebar Bottom: Quick Action White Box + Branch/Role Switchers */}
-        <div className="p-3 space-y-3">
-          {sidebarOpen ? (
-            <>
-              {/* Quick Action Card */}
-              <div
-                onClick={() => setIsAddProductOpen(true)}
-                className="w-full p-4 rounded-2xl bg-white text-gray-950 border border-zinc-200 flex flex-col items-center justify-center text-center cursor-pointer shadow-md hover:bg-gray-50 transition-all group"
-              >
-                <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                  <Plus size={16} />
-                </div>
-                <div className="text-xs font-bold text-gray-950">Add new product</div>
-                <div className="text-[11px] text-gray-500 mt-0.5">Or manage catalog</div>
-              </div>
-
-              {/* Outlet Switcher Footer */}
-              <div className="pt-2 border-t border-zinc-800/80 space-y-1 text-xs">
-                <div
-                  onClick={() => setIsOutletDropdownOpen(!isOutletDropdownOpen)}
-                  className="flex items-center justify-between px-2 py-1.5 text-zinc-400 hover:text-white cursor-pointer rounded-lg hover:bg-zinc-900/60 transition-colors"
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <Store size={13} className="text-zinc-500" />
-                    <span className="font-semibold text-zinc-200 truncate">{selectedBranch}</span>
-                  </div>
-                  <ChevronDown size={13} />
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="flex flex-col items-center gap-2.5 pb-1">
-              <button
-                onClick={() => setIsAddProductOpen(true)}
-                className="w-10 h-10 rounded-xl bg-white text-black hover:bg-gray-200 flex items-center justify-center shadow-md transition-colors cursor-pointer"
-                title="Add new product"
-              >
-                <Plus size={18} />
-              </button>
-              <div
-                className="w-8 h-8 rounded-full bg-zinc-800 text-white font-bold text-xs flex items-center justify-center border border-zinc-700 shadow-sm cursor-pointer"
-                title="Rahul (Admin)"
-              >
-                R
-              </div>
-            </div>
-          )}
-        </div>
       </aside>
 
       {/* ========================================================================= */}
-      {/* 2. MAIN CONTENT AREA (Clean, Light, Luxury Aesthetics)                     */}
+      {/* 2. MAIN CONTENT AREA (Scrolls independently while sidebar stays sticky)   */}
       {/* ========================================================================= */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#fafafa] overflow-y-auto">
+      <div className="flex-1 h-screen overflow-y-auto flex flex-col min-w-0 bg-[#fafafa]">
         {/* Top Header Bar: "My POS", "Outlet: [ Main Branch ∨ ]", Bell, "Name ∨" */}
         <header className="w-full bg-white border-b border-gray-200/90 px-4 sm:px-8 py-3.5 sm:py-4 flex items-center justify-between shrink-0 sticky top-0 z-20 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-          {/* Left: Sidebar Toggle + "My POS" */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="w-9 h-9 rounded-xl border border-gray-200 bg-white hover:bg-gray-100 flex items-center justify-center text-gray-700 cursor-pointer transition-colors shadow-2xs"
-              title={sidebarOpen ? "Close sidebar" : "Open sidebar"}
-            >
-              <Layers size={17} />
-            </button>
+          {/* Left: "My POS" */}
+          <div className="flex items-center">
             <h1 className="text-lg sm:text-xl font-bold tracking-tight text-gray-950">
               My POS
             </h1>
@@ -534,7 +514,7 @@ export const AdminDashboard: React.FC = () => {
         <main className="p-4 sm:p-8 space-y-7 max-w-7xl w-full mx-auto">
           {activeTab === "dashboard" ? (
             /* ========================================================================= */
-            /* TAB: DASHBOARD (Exact layout & content matching user's reference image)   */
+            /* TAB: DASHBOARD (Exact layout & content with Modern Bar Chart)             */
             /* ========================================================================= */
             <div className="space-y-7 animate-fadeIn">
               {/* Greeting Section */}
@@ -547,10 +527,274 @@ export const AdminDashboard: React.FC = () => {
                 </p>
               </div>
 
+              {/* ========================================================================= */}
+              {/* STARTUP GUIDE (Clean, compact, no gradients, no decorative shadows)       */}
+              {/* ========================================================================= */}
+              {!isStartupGuideDismissed ? (
+                <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 space-y-5">
+                  {/* Header Row */}
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-4 border-b border-gray-100">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                          Startup Guide
+                        </span>
+                        {isRequiredCompleted && (
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold flex items-center gap-1">
+                            <Check size={11} className="stroke-[3]" />
+                            <span>Ready to operate</span>
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-base sm:text-lg font-bold text-gray-950 mt-1">
+                        Get your business ready
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        Complete these steps to start using Nuradesk:
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3 self-start sm:self-auto">
+                      <span className="text-xs font-semibold text-gray-500">
+                        {completedCount} of 5 completed
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setIsStartupGuideDismissed(true)}
+                        className="text-xs text-gray-500 hover:text-gray-900 font-medium px-2.5 py-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                      >
+                        {isRequiredCompleted ? "Dismiss" : "Skip guide"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Steps List */}
+                  <div className="space-y-3">
+                    {/* 01 — Add Products */}
+                    <div className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleStep("step1")}
+                          title={completedSteps.step1 ? "Mark incomplete" : "Mark complete"}
+                          className="cursor-pointer shrink-0"
+                        >
+                          {completedSteps.step1 ? (
+                            <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
+                              <Check size={12} className="stroke-[3]" />
+                            </div>
+                          ) : (
+                            <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
+                          )}
+                        </button>
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm font-bold text-gray-950">
+                            01 — Add Products
+                          </div>
+                          <p className="text-xs text-gray-500 mt-0.5 truncate">
+                            Add the products or services you sell.
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsAddProductOpen(true);
+                          setCompletedSteps((prev) => ({ ...prev, step1: true }));
+                        }}
+                        className="shrink-0 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 text-gray-900 text-xs font-semibold cursor-pointer transition-colors"
+                      >
+                        Add Product
+                      </button>
+                    </div>
+
+                    {/* 02 — Add Staff */}
+                    <div className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleStep("step2")}
+                          title={completedSteps.step2 ? "Mark incomplete" : "Mark complete"}
+                          className="cursor-pointer shrink-0"
+                        >
+                          {completedSteps.step2 ? (
+                            <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
+                              <Check size={12} className="stroke-[3]" />
+                            </div>
+                          ) : (
+                            <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
+                          )}
+                        </button>
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm font-bold text-gray-950">
+                            02 — Add Staff
+                          </div>
+                          <p className="text-xs text-gray-500 mt-0.5 truncate">
+                            Create staff accounts and assign roles and PINs.
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab("staff");
+                          setCompletedSteps((prev) => ({ ...prev, step2: true }));
+                        }}
+                        className="shrink-0 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 text-gray-900 text-xs font-semibold cursor-pointer transition-colors"
+                      >
+                        Add Staff
+                      </button>
+                    </div>
+
+                    {/* 03 — Set Up POS */}
+                    <div className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleStep("step3")}
+                          title={completedSteps.step3 ? "Mark incomplete" : "Mark complete"}
+                          className="cursor-pointer shrink-0"
+                        >
+                          {completedSteps.step3 ? (
+                            <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
+                              <Check size={12} className="stroke-[3]" />
+                            </div>
+                          ) : (
+                            <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
+                          )}
+                        </button>
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm font-bold text-gray-950">
+                            03 — Set Up POS
+                          </div>
+                          <p className="text-xs text-gray-500 mt-0.5 truncate">
+                            Create and connect your POS terminal.
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab("terminals");
+                          setCompletedSteps((prev) => ({ ...prev, step3: true }));
+                        }}
+                        className="shrink-0 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 text-gray-900 text-xs font-semibold cursor-pointer transition-colors"
+                      >
+                        Set Up Terminal
+                      </button>
+                    </div>
+
+                    {/* 04 — Start Selling */}
+                    <div className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleStep("step4")}
+                          title={completedSteps.step4 ? "Mark incomplete" : "Mark complete"}
+                          className="cursor-pointer shrink-0"
+                        >
+                          {completedSteps.step4 ? (
+                            <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
+                              <Check size={12} className="stroke-[3]" />
+                            </div>
+                          ) : (
+                            <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
+                          )}
+                        </button>
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm font-bold text-gray-950">
+                            04 — Start Selling
+                          </div>
+                          <p className="text-xs text-gray-500 mt-0.5 truncate">
+                            Open the POS and make your first sale.
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsPosModalOpen(true);
+                          setCompletedSteps((prev) => ({ ...prev, step4: true }));
+                        }}
+                        className="shrink-0 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 text-gray-900 text-xs font-semibold cursor-pointer transition-colors"
+                      >
+                        Open POS
+                      </button>
+                    </div>
+
+                    {/* Restaurant / Café only Section */}
+                    <div className="pt-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                        Restaurant / Café only:
+                      </span>
+                    </div>
+
+                    {/* 05 — Set Up Tables & Kitchen */}
+                    <div className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleStep("step5")}
+                          title={completedSteps.step5 ? "Mark incomplete" : "Mark complete"}
+                          className="cursor-pointer shrink-0"
+                        >
+                          {completedSteps.step5 ? (
+                            <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
+                              <Check size={12} className="stroke-[3]" />
+                            </div>
+                          ) : (
+                            <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
+                          )}
+                        </button>
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm font-bold text-gray-950">
+                            05 — Set Up Tables & Kitchen
+                          </div>
+                          <p className="text-xs text-gray-500 mt-0.5 truncate">
+                            Create tables and connect your Kitchen Display.
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab("settings");
+                          setCompletedSteps((prev) => ({ ...prev, step5: true }));
+                        }}
+                        className="shrink-0 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 text-gray-900 text-xs font-semibold cursor-pointer transition-colors"
+                      >
+                        Set Up
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* Collapsed / Dismissed state */
+                <div className="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 bg-white text-xs text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-gray-900">Startup Guide</span>
+                    <span className="text-gray-300">•</span>
+                    <span>{completedCount} of 5 completed</span>
+                    {isRequiredCompleted && (
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                        ✓ Completed
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsStartupGuideDismissed(false)}
+                    className="text-black font-semibold hover:underline cursor-pointer"
+                  >
+                    Resume Guide
+                  </button>
+                </div>
+              )}
+
               {/* 4 KPI METRIC CARDS: Sales, Orders, Avg., Customer */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
                 {/* 1. Sales */}
-                <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow">
+                <div className="p-5 sm:p-6 rounded-xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow">
                   <div className="text-sm font-semibold text-gray-600">Sales</div>
                   <div className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight mt-2.5">
                     ₹48,520
@@ -562,7 +806,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* 2. Orders */}
-                <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow">
+                <div className="p-5 sm:p-6 rounded-xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow">
                   <div className="text-sm font-semibold text-gray-600">Orders</div>
                   <div className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight mt-2.5">
                     184
@@ -574,7 +818,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* 3. Avg. */}
-                <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow">
+                <div className="p-5 sm:p-6 rounded-xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow">
                   <div className="text-sm font-semibold text-gray-600">Avg.</div>
                   <div className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight mt-2.5">
                     ₹263
@@ -586,7 +830,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* 4. Customer */}
-                <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow">
+                <div className="p-5 sm:p-6 rounded-xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow">
                   <div className="text-sm font-semibold text-gray-600">Customer</div>
                   <div className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight mt-2.5">
                     126
@@ -598,9 +842,9 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* TWO LARGE CARDS: "Sales Overview" (with SALES CHART) & "Recent Sales" */}
+              {/* TWO LARGE CARDS: "Sales Overview" (MODERN BAR CHART) & "Recent Sales" */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* LEFT CARD: Sales Overview */}
+                {/* LEFT CARD: Sales Overview with Interactive BAR CHART */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg sm:text-xl font-bold text-gray-950">
@@ -623,75 +867,84 @@ export const AdminDashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* SALES CHART CONTAINER */}
-                  <div className="p-6 sm:p-7 rounded-2xl sm:rounded-3xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] min-h-[320px] flex flex-col justify-between relative overflow-hidden group">
-                    <div className="flex items-center justify-between pb-2">
+                  {/* SALES BAR CHART CONTAINER */}
+                  <div className="p-6 sm:p-7 rounded-xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] min-h-[340px] flex flex-col justify-between relative overflow-hidden group">
+                    {/* Top Revenue Summary & Peak Indicator */}
+                    <div className="flex items-center justify-between pb-3">
                       <div>
                         <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                          Total Revenue Today
+                          Total Revenue {chartTimeframe === "Today" ? "Today" : chartTimeframe === "Week" ? "This Week" : "This Month"}
                         </span>
-                        <div className="text-2xl font-black text-gray-950">₹48,520.00</div>
+                        <div className="text-2xl font-black text-gray-950">
+                          {chartTimeframe === "Today"
+                            ? "₹48,520.00"
+                            : chartTimeframe === "Week"
+                            ? "₹3,19,420.00"
+                            : "₹9,67,500.00"}
+                        </div>
                       </div>
                       <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">
-                        Peak: 2:00 PM – 4:00 PM
+                        {chartTimeframe === "Today" ? "Peak: 3:00 PM" : chartTimeframe === "Week" ? "Peak: Saturday" : "Peak: March"}
                       </span>
                     </div>
 
-                    {/* Styled Interactive SVG Sales Curve with SALES CHART label */}
-                    <div className="relative w-full h-48 sm:h-52 flex flex-col justify-end">
-                      {/* Watermark Label "SALES CHART" */}
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-                        <span className="text-2xl sm:text-3xl font-black tracking-widest text-gray-200 uppercase">
-                          SALES CHART
-                        </span>
+                    {/* Styled Interactive BAR CHART */}
+                    <div className="relative w-full pt-6 pb-2">
+                      {/* Bar Columns Container */}
+                      <div className="h-44 sm:h-48 flex items-end justify-between gap-3 sm:gap-5 border-b border-gray-100 px-2 sm:px-4 relative z-10">
+                        {activeChartData.map((item, idx) => {
+                          const isHovered = hoveredBarIndex === idx;
+
+                          return (
+                            <div
+                              key={item.time}
+                              onMouseEnter={() => setHoveredBarIndex(idx)}
+                              onMouseLeave={() => setHoveredBarIndex(null)}
+                              className="flex-1 flex flex-col items-center h-full justify-end group/bar cursor-pointer relative"
+                            >
+                              {/* Hover Floating Tooltip */}
+                              {isHovered && (
+                                <div className="absolute -top-10 bg-gray-950 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl z-20 whitespace-nowrap animate-fadeIn pointer-events-none border border-zinc-800">
+                                  <span>{item.amount}</span>
+                                  <span className="text-zinc-400 text-[10px] ml-1.5">({item.orders} orders)</span>
+                                </div>
+                              )}
+
+                              {/* Background Pill Track */}
+                              <div className="w-full max-w-[42px] h-full bg-gray-100/70 rounded-t-xl flex flex-col justify-end p-1 transition-colors group-hover/bar:bg-gray-100">
+                                {/* Colored Bar */}
+                                <div
+                                  style={{ height: `${item.heightPct}%` }}
+                                  className={`w-full rounded-t-lg transition-all duration-300 ${
+                                    item.isPeak
+                                      ? "bg-[#0047FF] shadow-sm group-hover/bar:brightness-110"
+                                      : isHovered
+                                      ? "bg-blue-600"
+                                      : "bg-blue-500/80 group-hover/bar:bg-blue-600"
+                                  }`}
+                                />
+                              </div>
+
+                              {/* Time Axis Label */}
+                              <span
+                                className={`text-[11px] mt-2.5 transition-colors ${
+                                  item.isPeak || isHovered
+                                    ? "font-bold text-gray-950"
+                                    : "font-semibold text-gray-500"
+                                }`}
+                              >
+                                {item.time}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
-
-                      {/* SVG Line & Gradient Curve */}
-                      <svg
-                        className="w-full h-full overflow-visible"
-                        viewBox="0 0 500 180"
-                        preserveAspectRatio="none"
-                      >
-                        <defs>
-                          <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#2563eb" stopOpacity="0.25" />
-                            <stop offset="100%" stopColor="#2563eb" stopOpacity="0.0" />
-                          </linearGradient>
-                        </defs>
-                        {/* Horizontal Grid lines */}
-                        <line x1="0" y1="40" x2="500" y2="40" stroke="#f3f4f6" strokeWidth="1" />
-                        <line x1="0" y1="90" x2="500" y2="90" stroke="#f3f4f6" strokeWidth="1" />
-                        <line x1="0" y1="140" x2="500" y2="140" stroke="#f3f4f6" strokeWidth="1" />
-
-                        {/* Filled Area */}
-                        <path
-                          d="M 0 160 Q 70 140 120 110 T 250 50 T 360 85 T 500 30 L 500 180 L 0 180 Z"
-                          fill="url(#salesGrad)"
-                        />
-                        {/* Stroke Path */}
-                        <path
-                          d="M 0 160 Q 70 140 120 110 T 250 50 T 360 85 T 500 30"
-                          fill="none"
-                          stroke="#2563eb"
-                          strokeWidth="3.5"
-                          strokeLinecap="round"
-                        />
-
-                        {/* Interactive Data Points */}
-                        <circle cx="120" cy="110" r="5" fill="#2563eb" className="stroke-white stroke-2" />
-                        <circle cx="250" cy="50" r="6" fill="#1e40af" className="stroke-white stroke-2" />
-                        <circle cx="360" cy="85" r="5" fill="#2563eb" className="stroke-white stroke-2" />
-                        <circle cx="500" cy="30" r="6" fill="#2563eb" className="stroke-white stroke-2" />
-                      </svg>
                     </div>
 
-                    {/* Time Axis Labels */}
-                    <div className="flex justify-between items-center pt-3 border-t border-gray-100 text-[11px] font-semibold text-gray-500">
-                      <span>9 AM</span>
-                      <span>12 PM</span>
-                      <span>3 PM</span>
-                      <span>6 PM</span>
-                      <span>9 PM</span>
+                    {/* Chart Footer Indicator */}
+                    <div className="flex justify-between items-center pt-2 text-[11px] font-medium text-gray-400">
+                      <span>Live Register Sync: Active</span>
+                      <span>Hover any bar for breakdown</span>
                     </div>
                   </div>
                 </div>
@@ -711,7 +964,7 @@ export const AdminDashboard: React.FC = () => {
                   </div>
 
                   {/* RECENT SALES CONTAINER */}
-                  <div className="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] min-h-[320px] flex flex-col justify-between">
+                  <div className="p-4 sm:p-5 rounded-xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] min-h-[340px] flex flex-col justify-between">
                     <div className="divide-y divide-gray-100">
                       {RECENT_SALES.map((sale) => (
                         <div
@@ -780,7 +1033,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
 
                 {/* Top Products Table */}
-                <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-x-auto">
+                <div className="p-5 sm:p-6 rounded-xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-x-auto">
                   <table className="w-full text-left text-xs sm:text-sm text-gray-700">
                     <thead>
                       <tr className="border-b border-gray-100 text-gray-400 text-xs font-semibold pb-3">
@@ -825,7 +1078,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* ADAPTIVE BUSINESS MODULES (Restaurant & Retail modules from user mockup) */}
-              <div className="p-6 sm:p-7 rounded-2xl sm:rounded-3xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-4">
+              <div className="p-6 sm:p-7 rounded-xl bg-white border border-gray-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-4">
                 <div className="space-y-1">
                   <h4 className="text-sm sm:text-base font-bold text-gray-950">
                     Business Modular Extensions
@@ -913,7 +1166,7 @@ export const AdminDashboard: React.FC = () => {
             /* ========================================================================= */
             /* TAB: POS TERMINALS STATION                                                */
             /* ========================================================================= */
-            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
+            <div className="p-6 sm:p-8 rounded-xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-6">
                 <div>
                   <h2 className="text-xl font-bold text-gray-950">POS Terminal Station</h2>
@@ -985,7 +1238,7 @@ export const AdminDashboard: React.FC = () => {
             /* ========================================================================= */
             /* TAB: PRODUCTS & MENU CATALOG                                              */
             /* ========================================================================= */
-            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
+            <div className="p-6 sm:p-8 rounded-xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-6">
                 <div>
                   <h2 className="text-xl font-bold text-gray-950">Products & Catalog</h2>
@@ -1029,9 +1282,7 @@ export const AdminDashboard: React.FC = () => {
                             className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                               p.status === "In Stock"
                                 ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                : p.status === "Low Stock"
-                                ? "bg-amber-50 text-amber-700 border border-amber-200"
-                                : "bg-red-50 text-red-700 border border-red-200"
+                                : "bg-amber-50 text-amber-700 border border-amber-200"
                             }`}
                           >
                             {p.status}
@@ -1052,7 +1303,7 @@ export const AdminDashboard: React.FC = () => {
             /* ========================================================================= */
             /* TAB: TERMINALS & HARDWARE                                                 */
             /* ========================================================================= */
-            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
+            <div className="p-6 sm:p-8 rounded-xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-6">
                 <div>
                   <h2 className="text-xl font-bold text-gray-950">Terminals & Hardware Devices</h2>
@@ -1093,7 +1344,7 @@ export const AdminDashboard: React.FC = () => {
             /* ========================================================================= */
             /* TAB: ORDERS                                                               */
             /* ========================================================================= */
-            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
+            <div className="p-6 sm:p-8 rounded-xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
               <div className="flex items-center justify-between border-b border-gray-100 pb-6">
                 <div>
                   <h2 className="text-xl font-bold text-gray-950">Orders Management</h2>
@@ -1144,7 +1395,7 @@ export const AdminDashboard: React.FC = () => {
             /* ========================================================================= */
             /* TAB: GENERIC WORKSPACE (Sales, Inventory, Billing, Payments, Staff, etc) */
             /* ========================================================================= */
-            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
+            <div className="p-6 sm:p-8 rounded-xl bg-white border border-gray-200/90 shadow-sm space-y-6 animate-fadeIn">
               <div className="flex items-center justify-between border-b border-gray-100 pb-6">
                 <div>
                   <h2 className="text-xl font-bold text-gray-950 capitalize">{activeTab} Hub</h2>

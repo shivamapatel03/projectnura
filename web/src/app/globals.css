@@ -29,6 +29,11 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
+
+  button:focus,
+  button:focus-visible {
+    outline: none;
+  }
 }
 
 @layer components {
