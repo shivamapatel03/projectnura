@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Check, ChevronDown, Search } from "lucide-react";
+import { IconEye, IconEyeOff, IconCheck, IconChevronDown, IconSearch } from "@tabler/icons-react";
 import * as Flags from "country-flag-icons/react/3x2";
 
 interface AuthPageProps {
@@ -304,7 +304,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = "signup" }) =>
                   {/* Success Notification */}
                   {verified && (
                     <div className="mb-4 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center justify-center gap-2">
-                      <Check size={15} className="text-emerald-600 shrink-0" />
+                      <IconCheck size={15} className="text-emerald-600 shrink-0" />
                       <span>Account verified successfully! Redirecting to onboarding...</span>
                     </div>
                   )}
@@ -417,7 +417,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = "signup" }) =>
                   {/* Success Notification */}
                   {submitted && (
                     <div className="mb-1.5 p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-2">
-                      <Check size={14} className="text-emerald-600 shrink-0" />
+                      <IconCheck size={14} className="text-emerald-600 shrink-0" />
                       <span>
                         {mode === "signup"
                           ? "Account setup initiated! Check your email to verify."
@@ -487,7 +487,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = "signup" }) =>
                                 );
                               })()}
                               <span className="text-[11px] font-medium text-gray-700">{selectedCountry.code}</span>
-                              <ChevronDown size={11} className="text-gray-400" />
+                              <IconChevronDown size={11} className="text-gray-400" />
                             </button>
 
                             {/* Phone Digits Input */}
@@ -514,7 +514,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = "signup" }) =>
                               <div className="absolute z-50 left-0 top-10 w-64 max-h-52 bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden flex flex-col">
                                 {/* Search Input Bar */}
                                 <div className="p-2 border-b border-gray-100 bg-gray-50/80 flex items-center gap-2 shrink-0">
-                                  <Search size={13} className="text-gray-400 shrink-0 ml-1" />
+                                  <IconSearch size={13} className="text-gray-400 shrink-0 ml-1" />
                                   <input
                                     type="text"
                                     value={countrySearch}
@@ -587,7 +587,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = "signup" }) =>
                           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors"
                           aria-label="Toggle password visibility"
                         >
-                          {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                          {showPassword ? <IconEyeOff size={15} /> : <IconEye size={15} />}
                         </button>
                       </div>
                     </div>
@@ -613,7 +613,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = "signup" }) =>
                             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors"
                             aria-label="Toggle confirm password visibility"
                           >
-                            {showConfirmPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                            {showConfirmPassword ? <IconEyeOff size={15} /> : <IconEye size={15} />}
                           </button>
                         </div>
                       </div>

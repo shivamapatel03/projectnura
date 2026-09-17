@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, X } from "lucide-react";
+import { IconChevronDown, IconX } from "@tabler/icons-react";
 
 interface SubItem {
   name: string;
@@ -191,7 +191,7 @@ export const Navbar: React.FC = () => {
                     aria-expanded={isOpen}
                   >
                     <span>{section.label}</span>
-                    <ChevronDown
+                    <IconChevronDown
                       size={14}
                       className={`transition-transform duration-200 ease-out ${
                         isOpen ? "rotate-180" : "rotate-0"
@@ -336,7 +336,7 @@ export const Navbar: React.FC = () => {
             className="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-100 transition-colors focus:outline-none cursor-pointer"
             aria-label="Close Menu"
           >
-            <X size={20} />
+            <IconX size={20} />
           </button>
         </div>
 

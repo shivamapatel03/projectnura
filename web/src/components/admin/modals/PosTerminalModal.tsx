@@ -2,23 +2,22 @@
 
 import React, { useState } from "react";
 import {
-  X,
-  ShoppingCart,
-  Search,
-  Plus,
-  Minus,
-  Trash2,
-  CreditCard,
-  QrCode,
-  DollarSign,
-  Printer,
-  Check,
-  RotateCcw,
-  Utensils,
-  ShoppingBag,
-  Truck,
-  KeyRound,
-} from "lucide-react";
+  IconX,
+  IconShoppingCart,
+  IconSearch,
+  IconPlus,
+  IconMinus,
+  IconTrash,
+  IconCreditCard,
+  IconQrcode,
+  IconCurrencyDollar,
+  IconPrinter,
+  IconCheck,
+  IconToolsKitchen2,
+  IconShoppingBag,
+  IconTruck,
+  IconKey,
+} from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 import { CartItem, Product, Sale } from "../types";
 
@@ -174,7 +173,7 @@ export const PosTerminalModal: React.FC = () => {
               onClick={() => setIsPosModalOpen(false)}
               className="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center text-white transition-colors cursor-pointer"
             >
-              <X size={18} />
+              <IconX size={18} />
             </button>
           </div>
         </div>
@@ -184,7 +183,7 @@ export const PosTerminalModal: React.FC = () => {
           <div className="flex-1 flex items-center justify-center p-6 bg-gray-50">
             <div className="w-full max-w-sm bg-white p-6 rounded-xl border border-gray-200 shadow-xl text-center space-y-4">
               <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center mx-auto">
-                <KeyRound size={22} />
+                <IconKey size={22} />
               </div>
               <div>
                 <h3 className="text-base font-bold text-gray-950">Staff PIN Login</h3>
@@ -232,31 +231,37 @@ export const PosTerminalModal: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setOrderType("Dine-in")}
-                    className={`px-3 py-1.5 rounded-md flex items-center gap-1.5 transition-colors ${
-                      orderType === "Dine-in" ? "bg-white text-black shadow-xs font-bold" : "text-gray-600"
+                    className={`h-8 px-3 rounded-lg font-semibold text-xs flex items-center gap-1.5 transition-colors ${
+                      orderType === "Dine-in"
+                        ? "bg-black text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
-                    <Utensils size={13} />
-                    <span>Dine-in</span>
+                    <IconToolsKitchen2 size={13} />
+                    <span>Dine-In</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setOrderType("Takeaway")}
-                    className={`px-3 py-1.5 rounded-md flex items-center gap-1.5 transition-colors ${
-                      orderType === "Takeaway" ? "bg-white text-black shadow-xs font-bold" : "text-gray-600"
+                    className={`h-8 px-3 rounded-lg font-semibold text-xs flex items-center gap-1.5 transition-colors ${
+                      orderType === "Takeaway"
+                        ? "bg-black text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
-                    <ShoppingBag size={13} />
+                    <IconShoppingBag size={13} />
                     <span>Takeaway</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setOrderType("Delivery")}
-                    className={`px-3 py-1.5 rounded-md flex items-center gap-1.5 transition-colors ${
-                      orderType === "Delivery" ? "bg-white text-black shadow-xs font-bold" : "text-gray-600"
+                    className={`h-8 px-3 rounded-lg font-semibold text-xs flex items-center gap-1.5 transition-colors ${
+                      orderType === "Delivery"
+                        ? "bg-black text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
-                    <Truck size={13} />
+                    <IconTruck size={13} />
                     <span>Delivery</span>
                   </button>
                 </div>
@@ -286,7 +291,7 @@ export const PosTerminalModal: React.FC = () => {
               {/* Search & Category Pills */}
               <div className="p-3 border-b border-gray-100 bg-white space-y-2 shrink-0">
                 <div className="relative">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <IconSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
                     placeholder="Search menu or scan barcode..."
@@ -375,7 +380,7 @@ export const PosTerminalModal: React.FC = () => {
               <div className="flex-1 overflow-y-auto p-3 space-y-2 divide-y divide-gray-100">
                 {cart.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-gray-400 text-xs py-10 space-y-2">
-                    <ShoppingCart size={24} className="stroke-1 text-gray-300" />
+                    <IconShoppingCart size={24} className="stroke-1 text-gray-300" />
                     <span>Cart is empty. Tap menu items to add.</span>
                   </div>
                 ) : (
@@ -395,17 +400,17 @@ export const PosTerminalModal: React.FC = () => {
                             onClick={() => updateQuantity(item.product.id, -1)}
                             className="w-6 h-6 flex items-center justify-center hover:bg-gray-100 text-gray-600"
                           >
-                            <Minus size={12} />
+                            <IconMinus size={12} />
                           </button>
-                          <span className="w-6 text-center font-mono font-bold text-gray-900 text-xs">
+                          <span className="font-bold text-xs font-mono w-4 text-center">
                             {item.quantity}
                           </span>
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.product.id, 1)}
-                            className="w-6 h-6 flex items-center justify-center hover:bg-gray-100 text-gray-600"
+                            className="w-6 h-6 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center font-bold text-xs"
                           >
-                            <Plus size={12} />
+                            <IconPlus size={12} />
                           </button>
                         </div>
 
@@ -474,7 +479,7 @@ export const PosTerminalModal: React.FC = () => {
                   onClick={() => setIsPaymentOpen(false)}
                   className="text-gray-400 hover:text-black"
                 >
-                  <X size={16} />
+                  <IconX size={16} />
                 </button>
               </div>
 
@@ -485,9 +490,9 @@ export const PosTerminalModal: React.FC = () => {
 
               <div className="grid grid-cols-3 gap-2.5">
                 {[
-                  { id: "UPI", icon: QrCode, label: "UPI / QR" },
-                  { id: "Card", icon: CreditCard, label: "Card Swipe" },
-                  { id: "Cash", icon: DollarSign, label: "Cash" },
+                  { id: "UPI", icon: IconQrcode, label: "UPI / QR" },
+                  { id: "Card", icon: IconCreditCard, label: "Card Swipe" },
+                  { id: "Cash", icon: IconCurrencyDollar, label: "Cash" },
                 ].map((m) => {
                   const Icon = m.icon;
                   const isSelected = selectedMethod === m.id;
@@ -604,15 +609,15 @@ export const PosTerminalModal: React.FC = () => {
                   onClick={() => alert("Thermal receipt sent to P1 printer!")}
                   className="h-9 rounded-lg border border-gray-300 font-sans font-semibold text-gray-800 hover:bg-gray-100 flex items-center justify-center gap-1.5"
                 >
-                  <Printer size={13} />
-                  <span>Print Receipt</span>
+                  <IconPrinter size={13} />
+                  <span>Print Thermal Receipt</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleStartNewSale}
                   className="h-9 rounded-lg bg-black text-white font-sans font-semibold hover:bg-zinc-800 flex items-center justify-center gap-1.5"
                 >
-                  <Check size={14} />
+                  <IconCheck size={14} />
                   <span>Next Sale</span>
                 </button>
               </div>

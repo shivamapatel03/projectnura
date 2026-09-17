@@ -3,25 +3,25 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { 
-  Layers, 
-  Clock, 
-  Scale, 
-  ShoppingBag, 
-  Scan, 
-  Package, 
-  Users, 
-  Truck, 
-  UserCheck, 
-  Calendar, 
-  Sparkles, 
-  FileText, 
-  Grid, 
-  ChefHat, 
-  Split, 
-  Share2,
-  Coffee,
-  Zap
-} from "lucide-react";
+  IconLayersLinked, 
+  IconClock, 
+  IconScale, 
+  IconShoppingBag, 
+  IconScan, 
+  IconPackage, 
+  IconUsers, 
+  IconTruck, 
+  IconUserCheck, 
+  IconCalendar, 
+  IconSparkles, 
+  IconFileText, 
+  IconLayoutGrid, 
+  IconChefHat, 
+  IconArrowsSplit, 
+  IconShare,
+  IconCoffee,
+  IconBolt
+} from "@tabler/icons-react";
 import { INDUSTRY_TABS } from "@/lib/data";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -53,43 +53,43 @@ export const IndustryTabs: React.FC = () => {
   const renderIcon = (iconName: string) => {
     switch (iconName) {
       case "Coffee":
-        return <Coffee size={20} className="text-white" />;
+        return <IconCoffee size={20} className="text-white" />;
       case "Zap":
-        return <Zap size={20} className="text-white" />;
+        return <IconBolt size={20} className="text-white" />;
       case "Layers":
-        return <Layers size={20} className="text-white" />;
+        return <IconLayersLinked size={20} className="text-white" />;
       case "Clock":
-        return <Clock size={20} className="text-white" />;
+        return <IconClock size={20} className="text-white" />;
       case "Scale":
-        return <Scale size={20} className="text-white" />;
+        return <IconScale size={20} className="text-white" />;
       case "ShoppingBag":
-        return <ShoppingBag size={20} className="text-white" />;
+        return <IconShoppingBag size={20} className="text-white" />;
       case "Scan":
-        return <Scan size={20} className="text-white" />;
+        return <IconScan size={20} className="text-white" />;
       case "Package":
-        return <Package size={20} className="text-white" />;
+        return <IconPackage size={20} className="text-white" />;
       case "Users":
-        return <Users size={20} className="text-white" />;
+        return <IconUsers size={20} className="text-white" />;
       case "Truck":
-        return <Truck size={20} className="text-white" />;
+        return <IconTruck size={20} className="text-white" />;
       case "UserCheck":
-        return <UserCheck size={20} className="text-white" />;
+        return <IconUserCheck size={20} className="text-white" />;
       case "Calendar":
-        return <Calendar size={20} className="text-white" />;
+        return <IconCalendar size={20} className="text-white" />;
       case "Sparkles":
-        return <Sparkles size={20} className="text-white" />;
+        return <IconSparkles size={20} className="text-white" />;
       case "FileText":
-        return <FileText size={20} className="text-white" />;
+        return <IconFileText size={20} className="text-white" />;
       case "Grid":
-        return <Grid size={20} className="text-white" />;
+        return <IconLayoutGrid size={20} className="text-white" />;
       case "ChefHat":
-        return <ChefHat size={20} className="text-white" />;
+        return <IconChefHat size={20} className="text-white" />;
       case "Split":
-        return <Split size={20} className="text-white" />;
+        return <IconArrowsSplit size={20} className="text-white" />;
       case "Share2":
-        return <Share2 size={20} className="text-white" />;
+        return <IconShare size={20} className="text-white" />;
       default:
-        return <Layers size={20} className="text-white" />;
+        return <IconLayersLinked size={20} className="text-white" />;
     }
   };
 

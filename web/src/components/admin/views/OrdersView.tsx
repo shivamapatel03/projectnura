@@ -2,33 +2,32 @@
 
 import React, { useState } from "react";
 import {
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  ChefHat,
-  PackageCheck,
-  Search,
-  ArrowRight,
-  X,
-  Printer,
-  ShoppingBag,
-  Utensils,
-  Truck,
-  RotateCw,
-} from "lucide-react";
+  IconClock,
+  IconCircleCheck,
+  IconAlertCircle,
+  IconChefHat,
+  IconPackageExport,
+  IconSearch,
+  IconArrowRight,
+  IconX,
+  IconShoppingBag,
+  IconToolsKitchen2,
+  IconTruck,
+  IconDeviceDesktop,
+} from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 import { Order, OrderStatus } from "../types";
 
 export const OrdersView: React.FC = () => {
-  const { orders, updateOrderStatus, setIsPosModalOpen } = useAdminStore();
+  const { orders, updateOrderStatus, setActiveTab } = useAdminStore();
 
-  const [activeTab, setActiveTab] = useState<OrderStatus | "All">("All");
+  const [activeStatusTab, setActiveStatusTab] = useState<OrderStatus | "All">("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<string>("All");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const filteredOrders = orders.filter((ord) => {
-    const matchesTab = activeTab === "All" || ord.status === activeTab;
+    const matchesTab = activeStatusTab === "All" || ord.status === activeStatusTab;
     const matchesType = selectedType === "All" || ord.type === selectedType;
     const matchesSearch =
       ord.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -49,31 +48,31 @@ export const OrdersView: React.FC = () => {
       case "Open":
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
-            <Clock size={11} /> Open
+            <IconClock size={11} /> Open
           </span>
         );
       case "Preparing":
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-            <ChefHat size={11} /> In Kitchen
+            <IconChefHat size={11} /> In Kitchen
           </span>
         );
       case "Ready":
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-purple-50 text-purple-700 border border-purple-200">
-            <PackageCheck size={11} /> Ready
+            <IconPackageExport size={11} /> Ready
           </span>
         );
       case "Completed":
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <CheckCircle2 size={11} /> Completed
+            <IconCircleCheck size={11} /> Completed
           </span>
         );
       case "Cancelled":
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200">
-            <AlertCircle size={11} /> Cancelled
+            <IconAlertCircle size={11} /> Cancelled
           </span>
         );
     }
@@ -101,11 +100,11 @@ export const OrdersView: React.FC = () => {
         <div className="flex items-center gap-2.5">
           <button
             type="button"
-            onClick={() => setIsPosModalOpen(true)}
+            onClick={() => setActiveTab("terminals")}
             className="h-10 px-4 rounded-xl bg-black hover:bg-zinc-800 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors shrink-0"
           >
-            <ShoppingBag size={16} />
-            <span>New Order / Sale</span>
+            <IconDeviceDesktop size={16} />
+            <span>Terminals</span>
           </button>
         </div>
       </div>
@@ -113,58 +112,58 @@ export const OrdersView: React.FC = () => {
       {/* 4 Pipeline Mini Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div
-          onClick={() => setActiveTab(activeTab === "Open" ? "All" : "Open")}
+          onClick={() => setActiveStatusTab(activeStatusTab === "Open" ? "All" : "Open")}
           className={`p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1 cursor-pointer transition-colors ${
-            activeTab === "Open" ? "border-blue-500 ring-1 ring-blue-500" : "hover:border-gray-300"
+            activeStatusTab === "Open" ? "border-blue-500 ring-1 ring-blue-500" : "hover:border-gray-300"
           }`}
         >
           <div className="text-xs text-blue-700 font-medium flex items-center gap-1">
-            <Clock size={13} />
+            <IconClock size={13} />
             <span>Open Orders</span>
           </div>
           <div className="text-2xl font-bold text-blue-700 font-mono">{openCount}</div>
         </div>
 
         <div
-          onClick={() => setActiveTab(activeTab === "Preparing" ? "All" : "Preparing")}
+          onClick={() => setActiveStatusTab(activeStatusTab === "Preparing" ? "All" : "Preparing")}
           className={`p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1 cursor-pointer transition-colors ${
-            activeTab === "Preparing"
+            activeStatusTab === "Preparing"
               ? "border-amber-500 ring-1 ring-amber-500"
               : "hover:border-gray-300"
           }`}
         >
           <div className="text-xs text-amber-700 font-medium flex items-center gap-1">
-            <ChefHat size={13} />
+            <IconChefHat size={13} />
             <span>In Preparation</span>
           </div>
           <div className="text-2xl font-bold text-amber-600 font-mono">{preparingCount}</div>
         </div>
 
         <div
-          onClick={() => setActiveTab(activeTab === "Ready" ? "All" : "Ready")}
+          onClick={() => setActiveStatusTab(activeStatusTab === "Ready" ? "All" : "Ready")}
           className={`p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1 cursor-pointer transition-colors ${
-            activeTab === "Ready"
+            activeStatusTab === "Ready"
               ? "border-purple-500 ring-1 ring-purple-500"
               : "hover:border-gray-300"
           }`}
         >
           <div className="text-xs text-purple-700 font-medium flex items-center gap-1">
-            <PackageCheck size={13} />
+            <IconPackageExport size={13} />
             <span>Ready for Pickup</span>
           </div>
           <div className="text-2xl font-bold text-purple-700 font-mono">{readyCount}</div>
         </div>
 
         <div
-          onClick={() => setActiveTab(activeTab === "Completed" ? "All" : "Completed")}
+          onClick={() => setActiveStatusTab(activeStatusTab === "Completed" ? "All" : "Completed")}
           className={`p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1 cursor-pointer transition-colors ${
-            activeTab === "Completed"
+            activeStatusTab === "Completed"
               ? "border-emerald-500 ring-1 ring-emerald-500"
               : "hover:border-gray-300"
           }`}
         >
           <div className="text-xs text-emerald-700 font-medium flex items-center gap-1">
-            <CheckCircle2 size={13} />
+            <IconCircleCheck size={13} />
             <span>Completed Orders</span>
           </div>
           <div className="text-2xl font-bold text-emerald-600 font-mono">{completedCount}</div>
@@ -181,9 +180,9 @@ export const OrdersView: React.FC = () => {
                 <button
                   key={tab}
                   type="button"
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => setActiveStatusTab(tab)}
                   className={`px-3.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors whitespace-nowrap ${
-                    activeTab === tab
+                    activeStatusTab === tab
                       ? "bg-black text-white"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
@@ -210,7 +209,7 @@ export const OrdersView: React.FC = () => {
 
             {/* Search Input */}
             <div className="relative min-w-[240px]">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <IconSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search order #, table, customer..."
@@ -242,7 +241,7 @@ export const OrdersView: React.FC = () => {
               {filteredOrders.length === 0 ? (
                 <tr>
                   <td colSpan={9} className="py-12 text-center text-gray-400">
-                    <ShoppingBag size={32} className="mx-auto mb-2 opacity-30" />
+                    <IconShoppingBag size={32} className="mx-auto mb-2 opacity-30" />
                     No orders matching the active criteria.
                   </td>
                 </tr>
@@ -260,11 +259,11 @@ export const OrdersView: React.FC = () => {
                       </td>
                       <td className="py-3.5 px-3 whitespace-nowrap">
                         <div className="flex items-center gap-1.5 font-medium text-gray-900">
-                          {ord.type === "Dine-in" && <Utensils size={13} className="text-amber-600" />}
+                          {ord.type === "Dine-in" && <IconToolsKitchen2 size={13} className="text-amber-600" />}
                           {ord.type === "Takeaway" && (
-                            <ShoppingBag size={13} className="text-blue-600" />
+                            <IconShoppingBag size={13} className="text-blue-600" />
                           )}
-                          {ord.type === "Delivery" && <Truck size={13} className="text-purple-600" />}
+                          {ord.type === "Delivery" && <IconTruck size={13} className="text-purple-600" />}
                           <span>{ord.type}</span>
                         </div>
                         <div className="text-[11px] text-gray-500 font-mono">
@@ -297,7 +296,7 @@ export const OrdersView: React.FC = () => {
                             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-black hover:bg-zinc-800 text-white text-xs font-semibold cursor-pointer transition-colors"
                           >
                             <span>Mark {nextStatus}</span>
-                            <ArrowRight size={12} />
+                            <IconArrowRight size={12} />
                           </button>
                         ) : (
                           <button
@@ -324,7 +323,7 @@ export const OrdersView: React.FC = () => {
           <div className="bg-white rounded-xl max-w-md w-full border border-gray-200 overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
               <div className="flex items-center gap-2">
-                <ChefHat size={17} className="text-gray-700" />
+                <IconChefHat size={17} className="text-gray-700" />
                 <span className="font-bold text-gray-900 text-sm">
                   Order Ticket: {selectedOrder.orderNumber}
                 </span>
@@ -335,7 +334,7 @@ export const OrdersView: React.FC = () => {
                 aria-label="Close order details"
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-100 transition-colors cursor-pointer"
               >
-                <X size={16} />
+                <IconX size={16} />
               </button>
             </div>
 
@@ -443,7 +442,7 @@ export const OrdersView: React.FC = () => {
                     className="px-4 py-2 rounded-xl text-xs font-semibold bg-black text-white hover:bg-zinc-800 cursor-pointer transition-colors flex items-center gap-1.5"
                   >
                     <span>Advance to {getNextStatus(selectedOrder.status)}</span>
-                    <ArrowRight size={13} />
+                    <IconArrowRight size={13} />
                   </button>
                 )}
                 <button

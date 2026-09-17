@@ -2,15 +2,15 @@
 
 import React, { useState } from "react";
 import { 
-  Zap, 
-  Users, 
-  Utensils, 
-  Package, 
-  Building2, 
-  BarChart3, 
-  Sparkles,
-  ChevronDown
-} from "lucide-react";
+  IconBolt, 
+  IconUsers, 
+  IconToolsKitchen2, 
+  IconPackage, 
+  IconBuilding, 
+  IconChartBar, 
+  IconSparkles,
+  IconChevronDown
+} from "@tabler/icons-react";
 import { POS_CAPABILITIES } from "@/lib/data";
 import MuxVideoCard from "@/components/MuxVideoCard";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -24,19 +24,19 @@ export const FeatureEngine: React.FC = () => {
   const getFeatureIcon = (id: string) => {
     switch (id) {
       case "quick-billing":
-        return <Zap size={18} className="text-black" />;
+        return <IconBolt size={18} className="text-black" />;
       case "customer-mgmt":
-        return <Users size={18} className="text-black" />;
+        return <IconUsers size={18} className="text-black" />;
       case "tables-kot":
-        return <Utensils size={18} className="text-black" />;
+        return <IconToolsKitchen2 size={18} className="text-black" />;
       case "inventory":
-        return <Package size={18} className="text-black" />;
+        return <IconPackage size={18} className="text-black" />;
       case "multi-outlet":
-        return <Building2 size={18} className="text-black" />;
+        return <IconBuilding size={18} className="text-black" />;
       case "reports":
-        return <BarChart3 size={18} className="text-black" />;
+        return <IconChartBar size={18} className="text-black" />;
       default:
-        return <Sparkles size={18} className="text-black" />;
+        return <IconSparkles size={18} className="text-black" />;
     }
   };
 
@@ -82,7 +82,7 @@ export const FeatureEngine: React.FC = () => {
                         {item.badge}
                       </span>
                     )}
-                    <ChevronDown
+                    <IconChevronDown
                       size={16}
                       className={`text-gray-400 transition-transform duration-200 ${
                         isActive ? "rotate-180 text-black" : ""
@@ -147,7 +147,7 @@ export const FeatureEngine: React.FC = () => {
                         {item.badge}
                       </span>
                     )}
-                    <ChevronDown
+                    <IconChevronDown
                       size={16}
                       className={`text-gray-400 transition-transform duration-200 ${
                         isActive ? "rotate-180 text-black" : ""

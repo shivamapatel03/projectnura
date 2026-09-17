@@ -2,19 +2,16 @@
 
 import React, { useState } from "react";
 import {
-  FileText,
-  Search,
-  Download,
-  Printer,
-  CheckCircle2,
-  RotateCcw,
-  Percent,
-  Calendar,
-  Eye,
-  X,
-  CreditCard,
-  Building,
-} from "lucide-react";
+  IconFileText,
+  IconSearch,
+  IconDownload,
+  IconPrinter,
+  IconCircleCheck,
+  IconRotate2,
+  IconPercentage,
+  IconEye,
+  IconX,
+} from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 import { Sale } from "../types";
 
@@ -86,7 +83,7 @@ export const BillingView: React.FC = () => {
             onClick={handleExportInvoices}
             className="h-10 px-3.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors"
           >
-            <Download size={15} />
+            <IconDownload size={15} />
             <span>Export GST Invoices</span>
           </button>
         </div>
@@ -112,7 +109,7 @@ export const BillingView: React.FC = () => {
 
         <div className="p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1">
           <div className="text-xs text-purple-700 font-medium flex items-center gap-1">
-            <Percent size={13} />
+            <IconPercentage size={13} />
             <span>GST Output Tax</span>
           </div>
           <div className="text-2xl font-bold text-purple-700 font-mono">
@@ -125,7 +122,7 @@ export const BillingView: React.FC = () => {
 
         <div className="p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1">
           <div className="text-xs text-amber-700 font-medium flex items-center gap-1">
-            <RotateCcw size={13} />
+            <IconRotate2 size={13} />
             <span>Credit Notes (Refunds)</span>
           </div>
           <div className="text-2xl font-bold text-amber-600 font-mono">
@@ -140,12 +137,11 @@ export const BillingView: React.FC = () => {
         {/* Search & Action Bar */}
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between pb-4 border-b border-gray-100">
           <div className="text-sm font-bold text-gray-950 flex items-center gap-2">
-            <FileText size={16} className="text-gray-600" />
-            <span>Tax Invoices Registry</span>
+            <IconFileText size={16} className="text-gray-600" />
+            <span className="font-semibold text-gray-800">GST Invoice Register</span>
           </div>
-
-          <div className="relative min-w-[260px]">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <div className="relative w-full sm:w-64">
+            <IconSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search invoice #, customer name..."
@@ -193,12 +189,12 @@ export const BillingView: React.FC = () => {
                     </td>
                     <td className="py-3.5 px-3 text-center">
                       {inv.status === "Completed" ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          <CheckCircle2 size={11} /> Paid
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                          <IconCircleCheck size={11} /> Paid
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                          <RotateCcw size={11} /> Refunded
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                          <IconRotate2 size={11} /> Refunded
                         </span>
                       )}
                     </td>
@@ -208,7 +204,7 @@ export const BillingView: React.FC = () => {
                         onClick={() => setSelectedInvoice(inv)}
                         className="inline-flex items-center gap-1 text-xs text-gray-600 hover:text-black font-semibold cursor-pointer"
                       >
-                        <Eye size={13} />
+                        <IconEye size={13} />
                         <span>View</span>
                       </button>
                     </td>
@@ -226,7 +222,7 @@ export const BillingView: React.FC = () => {
           <div className="bg-white rounded-xl max-w-lg w-full border border-gray-200 overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
               <div className="flex items-center gap-2">
-                <FileText size={17} className="text-gray-700" />
+                <IconFileText size={17} className="text-gray-700" />
                 <span className="font-bold text-gray-900 text-sm">
                   Tax Invoice: {selectedInvoice.invoiceNumber}
                 </span>
@@ -237,7 +233,7 @@ export const BillingView: React.FC = () => {
                 aria-label="Close invoice preview"
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-100 transition-colors cursor-pointer"
               >
-                <X size={16} />
+                <IconX size={16} />
               </button>
             </div>
 
@@ -326,7 +322,7 @@ export const BillingView: React.FC = () => {
                 onClick={() => window.print()}
                 className="px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100 border border-gray-200 cursor-pointer flex items-center gap-1.5"
               >
-                <Printer size={14} />
+                <IconPrinter size={14} />
                 <span>Print Invoice</span>
               </button>
               <button

@@ -110,6 +110,33 @@
     padding: 0.875rem 2rem;
   }
 
+  /* Button-20 AI Variant with custom red/magenta/purple gradient background */
+  .button-20-ai {
+    background-color: #9d0846;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0)), url('/ai-btn-bg.png'), linear-gradient(135deg, #c00022 0%, #b30855 50%, #4c032e 100%);
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: rgba(255, 255, 255, 0.25) 0 1px 0 inset, rgba(0, 0, 0, 0.15) 0 1px 2px;
+    color: #FFFFFF !important;
+  }
+
+  .button-20-ai:hover {
+    filter: brightness(1.1);
+    box-shadow: rgba(255, 255, 255, 0.35) 0 1px 0 inset, rgba(0, 0, 0, 0.25) 0 2px 5px;
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+
+  .button-20-ai:focus {
+    box-shadow: rgba(255, 255, 255, 0.25) 0 1px 0 inset, rgba(0, 0, 0, 0.15) 0 1px 2px, rgba(196, 12, 46, 0.4) 0 0 0 .2rem;
+  }
+
+  .button-20-ai:active {
+    filter: brightness(0.94);
+    box-shadow: rgba(0, 0, 0, 0.35) 0 2px 4px inset;
+    transform: scale(0.97);
+  }
+
   /* Secondary outline button style */
   .button-secondary {
     appearance: button;
@@ -151,4 +178,61 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* GPU-accelerated smooth drawer slide and fade animations */
+@keyframes drawerSlideIn {
+  0% {
+    transform: translate3d(100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes drawerSlideOut {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes drawerFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes drawerFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-drawer-in {
+  animation: drawerSlideIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform;
+}
+
+.animate-drawer-out {
+  animation: drawerSlideOut 0.24s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: transform;
+}
+
+.animate-backdrop-in {
+  animation: drawerFadeIn 0.3s ease-out forwards;
+  will-change: opacity;
+}
+
+.animate-backdrop-out {
+  animation: drawerFadeOut 0.22s ease-in forwards;
+  will-change: opacity;
 }

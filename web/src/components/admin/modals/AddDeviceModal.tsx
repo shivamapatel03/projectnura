@@ -1,179 +1,266 @@
 "use client";
 
-import React, { useState } from "react";
-import { X, Monitor, Printer, Tv, DollarSign, Check, QrCode } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { IconX, IconCopy, IconCheck } from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
-import { DeviceType } from "../types";
+import { DeviceType, Device } from "../types";
 
 export const AddDeviceModal: React.FC = () => {
-  const { isAddDeviceOpen, setIsAddDeviceOpen, addDevice, selectedOutlet } = useAdminStore();
+  const {
+    isAddDeviceOpen,
+    setIsAddDeviceOpen,
+    addDevice,
+    devices,
+    selectedOutlet,
+    outlets,
+  } = useAdminStore();
 
   const [step, setStep] = useState<1 | 2>(1);
   const [deviceType, setDeviceType] = useState<DeviceType>("POS Terminal");
-  const [name, setName] = useState("");
-  const [generatedCode, setGeneratedCode] = useState("");
+  const [name, setName] = useState("Counter POS 1");
+  const [outletId, setOutletId] = useState(selectedOutlet.id);
+  const [createdDevice, setCreatedDevice] = useState<Device | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  // Sync outletId when modal opens
+  useEffect(() => {
+    if (isAddDeviceOpen) {
+      setOutletId(selectedOutlet.id);
+      setStep(1);
+      setCopied(false);
+    }
+  }, [isAddDeviceOpen, selectedOutlet.id]);
+
+  // Update default name suggestion when device type changes
+  useEffect(() => {
+    if (step === 1) {
+      const prefix =
+        deviceType === "POS Terminal"
+          ? "Counter POS"
+          : deviceType === "Kitchen Display"
+          ? "Kitchen Display"
+          : "Customer Display";
+      const count =
+        devices.filter((d) => d.type === deviceType).length + 1;
+      setName(`${prefix} ${count}`);
+    }
+  }, [deviceType, devices, step]);
 
   if (!isAddDeviceOpen) return null;
 
-  const handleGenerateCode = (e: React.FormEvent) => {
+  const getNextCode = (type: DeviceType): string => {
+    const prefix =
+      type === "POS Terminal" ? "T" : type === "Kitchen Display" ? "K" : "CD";
+    const existingNums = devices
+      .filter((d) => d.code.startsWith(prefix))
+      .map((d) => parseInt(d.code.replace(prefix, ""), 10))
+      .filter((n) => !isNaN(n));
+    const nextNum = existingNums.length > 0 ? Math.max(...existingNums) + 1 : 1;
+    return `${prefix}${nextNum}`;
+  };
+
+  const generatePairingCode = (): string => {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let part = "";
+    for (let i = 0; i < 4; i++) {
+      part += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return `NURA-${part}`;
+  };
+
+  const handleCreateDevice = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name) return;
+    if (!name.trim()) return;
 
-    const codePrefix =
-      deviceType === "POS Terminal"
-        ? "T"
-        : deviceType === "Kitchen Display"
-        ? "K"
-        : deviceType === "Customer Display"
-        ? "CD"
-        : deviceType === "Receipt Printer"
-        ? "P"
-        : "D";
+    const targetOutlet =
+      outlets.find((o) => o.id === outletId) || selectedOutlet;
+    const code = getNextCode(deviceType);
+    const pairingCode = generatePairingCode();
 
-    const code = `${codePrefix}${Math.floor(3 + Math.random() * 7)}`;
-    const pairingCode = `ND-${Math.floor(1000 + Math.random() * 9000)}`;
-    setGeneratedCode(pairingCode);
-
-    addDevice({
+    const newDevice = addDevice({
       code,
-      name,
+      name: name.trim(),
       type: deviceType,
-      outletId: selectedOutlet.id,
-      outletName: selectedOutlet.name,
+      outletId: targetOutlet.id,
+      outletName: targetOutlet.name,
       status: "Online",
-      ip: `192.168.1.${Math.floor(105 + Math.random() * 90)}`,
-      pairedCode: pairingCode,
+      lastActive: "Just now",
+      createdDate: "17 Sep 2026",
+      pairingCode,
+      hardware:
+        deviceType === "POS Terminal"
+          ? {
+              receiptPrinter: "Connected",
+              cashDrawer: "Connected",
+              customerDisplay: "Not Connected",
+            }
+          : undefined,
+      ip: `192.168.1.${Math.floor(110 + Math.random() * 80)}`,
     });
 
+    setCreatedDevice(newDevice);
     setStep(2);
   };
 
-  const handleFinish = () => {
+  const handleCopyCode = () => {
+    if (createdDevice?.pairingCode) {
+      navigator.clipboard.writeText(createdDevice.pairingCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleDone = () => {
     setIsAddDeviceOpen(false);
     setStep(1);
-    setName("");
+    setCreatedDevice(null);
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-fadeIn">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col animate-fadeIn">
         {/* Modal Header */}
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0 bg-white">
-          <div>
-            <h3 className="text-base font-bold text-gray-950">Pair Hardware Device</h3>
-            <p className="text-xs text-gray-500">
-              {step === 1 ? "Select device hardware specification" : "Pairing code generated"}
-            </p>
-          </div>
+          <h3 className="text-base font-bold text-gray-950">
+            {step === 1 ? "Add Device" : "Device Created"}
+          </h3>
           <button
             type="button"
-            onClick={() => setIsAddDeviceOpen(false)}
-            className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-900"
+            onClick={handleDone}
+            className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-900 cursor-pointer transition-colors"
           >
-            <X size={18} />
+            <IconX size={18} />
           </button>
         </div>
 
         {step === 1 ? (
-          <form onSubmit={handleGenerateCode} className="p-6 space-y-4 text-xs">
-            <div className="space-y-2">
-              <label className="font-semibold text-gray-900">Device Hardware Type</label>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { type: "POS Terminal", icon: Monitor, label: "POS Terminal" },
-                  { type: "Kitchen Display", icon: Tv, label: "Kitchen KDS" },
-                  { type: "Receipt Printer", icon: Printer, label: "Printer (80mm)" },
-                  { type: "Customer Display", icon: Tv, label: "Customer Screen" },
-                  { type: "Cash Drawer", icon: DollarSign, label: "Cash Drawer" },
-                ].map((d) => {
-                  const Icon = d.icon;
-                  const isSelected = deviceType === d.type;
-
+          <form onSubmit={handleCreateDevice} className="p-6 space-y-5 text-xs">
+            {/* Device Type Radio */}
+            <div className="space-y-2.5">
+              <label className="text-xs font-semibold text-gray-900 block">
+                Device Type
+              </label>
+              <div className="space-y-2">
+                {(
+                  [
+                    "POS Terminal",
+                    "Kitchen Display",
+                    "Customer Display",
+                  ] as DeviceType[]
+                ).map((t) => {
+                  const isChecked = deviceType === t;
                   return (
-                    <button
-                      key={d.type}
-                      type="button"
-                      onClick={() => {
-                        setDeviceType(d.type as DeviceType);
-                        if (!name) setName(d.label);
-                      }}
-                      className={`p-3 rounded-lg border text-left flex items-center gap-2.5 transition-colors ${
-                        isSelected
-                          ? "border-black bg-gray-50 font-bold text-black"
+                    <label
+                      key={t}
+                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                        isChecked
+                          ? "border-black bg-gray-50 text-gray-950 font-semibold"
                           : "border-gray-200 hover:border-gray-300 text-gray-700"
                       }`}
                     >
-                      <Icon size={16} />
-                      <span>{d.label}</span>
-                    </button>
+                      <input
+                        type="radio"
+                        name="deviceType"
+                        checked={isChecked}
+                        onChange={() => setDeviceType(t)}
+                        className="w-4 h-4 text-black focus:ring-black accent-black cursor-pointer"
+                      />
+                      <span className="text-xs">{t}</span>
+                    </label>
                   );
                 })}
               </div>
             </div>
 
-            <div className="space-y-1.5 pt-2">
-              <label className="font-semibold text-gray-900">Device Nickname / Location</label>
+            {/* Device Name */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-gray-900 block">
+                Device Name
+              </label>
               <input
                 type="text"
                 required
-                placeholder="e.g. Counter 3 / Bar Station"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full h-10 px-3.5 rounded-lg border border-gray-200 bg-gray-50/50 focus:bg-white focus:border-black outline-none text-xs text-gray-900"
+                placeholder="e.g. Counter POS 1"
+                className="w-full h-10 px-3.5 rounded-xl border border-gray-200 bg-white focus:border-black outline-none text-xs text-gray-950 transition-colors"
               />
             </div>
 
-            <div className="p-3 rounded-lg bg-gray-50 border border-gray-200 text-gray-600 text-[11px] space-y-1">
-              <div className="font-semibold text-gray-900">Target Outlet</div>
-              <div>{selectedOutlet.name} ({selectedOutlet.address})</div>
+            {/* Outlet Selector */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-gray-900 block">
+                Outlet
+              </label>
+              <select
+                value={outletId}
+                onChange={(e) => setOutletId(e.target.value)}
+                className="w-full h-10 px-3 rounded-xl border border-gray-200 bg-white focus:border-black outline-none text-xs text-gray-950 cursor-pointer transition-colors"
+              >
+                {outlets.map((out) => (
+                  <option key={out.id} value={out.id}>
+                    {out.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <div className="pt-3 border-t border-gray-100 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setIsAddDeviceOpen(false)}
-                className="h-9 px-4 rounded-lg border border-gray-200 font-semibold text-gray-700 hover:bg-gray-100"
-              >
-                Cancel
-              </button>
+            {/* Submit Button */}
+            <div className="pt-2">
               <button
                 type="submit"
-                className="h-9 px-5 rounded-lg bg-black text-white font-semibold hover:bg-zinc-800"
+                className="button-20 w-full h-11 !rounded-xl text-xs font-semibold cursor-pointer"
               >
-                Generate Device Code
+                Create Device
               </button>
             </div>
           </form>
         ) : (
-          <div className="p-6 text-center space-y-5 text-xs">
-            <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto">
-              <Check size={24} className="stroke-[2.5]" />
+          /* Step 2: After Creating */
+          <div className="p-6 space-y-6 text-center">
+            {/* Device Subheader */}
+            <div className="text-left bg-gray-50 border border-gray-200 rounded-xl p-3.5">
+              <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                Device
+              </div>
+              <div className="text-sm font-bold text-gray-950 mt-0.5">
+                {createdDevice?.code} — {createdDevice?.name}
+              </div>
+              <div className="text-xs text-gray-500 mt-0.5">
+                {createdDevice?.type} · {createdDevice?.outletName}
+              </div>
             </div>
 
-            <div>
-              <h4 className="text-base font-bold text-gray-950">Enter Pairing Code on Hardware</h4>
-              <p className="text-gray-500 mt-1">
-                Open the Nuradesk app on the target device and type this one-time code:
+            {/* Pairing Code Section */}
+            <div className="p-5 rounded-xl border border-gray-200 bg-white text-center space-y-2">
+              <div className="text-xs font-semibold text-gray-500">
+                Pairing Code
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-2xl sm:text-3xl font-mono font-black text-gray-950 tracking-wider">
+                  {createdDevice?.pairingCode}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleCopyCode}
+                  title="Copy Pairing Code"
+                  className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-100 text-gray-600 hover:text-black transition-colors cursor-pointer"
+                >
+                  {copied ? <IconCheck size={16} className="text-emerald-600" /> : <IconCopy size={16} />}
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 pt-1">
+                Enter this code on the physical device.
               </p>
             </div>
 
-            <div className="p-5 rounded-xl border border-gray-200 bg-gray-50 text-center space-y-2">
-              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Device Code</div>
-              <div className="text-3xl font-mono font-black text-gray-950 tracking-wider">
-                {generatedCode}
-              </div>
-              <div className="text-[11px] text-emerald-700 font-semibold flex items-center justify-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Listening for device handshake...</span>
-              </div>
-            </div>
-
+            {/* Done Button */}
             <button
               type="button"
-              onClick={handleFinish}
-              className="w-full h-10 rounded-lg bg-black text-white font-semibold hover:bg-zinc-800 transition-colors"
+              onClick={handleDone}
+              className="button-20 w-full h-11 !rounded-xl text-xs font-semibold cursor-pointer"
             >
-              Device Paired & Connected
+              Done
             </button>
           </div>
         )}
@@ -181,3 +268,4 @@ export const AddDeviceModal: React.FC = () => {
     </div>
   );
 };
+export default AddDeviceModal;

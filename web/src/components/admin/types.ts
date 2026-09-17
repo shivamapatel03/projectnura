@@ -1,6 +1,5 @@
 export type AdminTab =
   | "dashboard"
-  | "pos"
   | "sales"
   | "orders"
   | "products"
@@ -91,18 +90,28 @@ export type DeviceType =
   | "Receipt Printer"
   | "Cash Drawer";
 
+export interface DeviceHardware {
+  receiptPrinter: "Connected" | "Not Connected";
+  cashDrawer: "Connected" | "Not Connected";
+  customerDisplay: "Connected" | "Not Connected";
+}
+
 export interface Device {
   id: string;
-  code: string; // e.g. T1, K1, P1
+  code: string; // e.g. T1, T2, K1, CD1
   name: string;
   type: DeviceType;
   outletId: string;
   outletName: string;
-  status: "Online" | "Busy" | "Offline";
-  ip: string;
+  status: "Online" | "Offline" | "Busy" | "Disabled";
+  lastActive: string;
+  createdDate: string;
+  pairingCode?: string;
+  hardware?: DeviceHardware;
+  ip?: string;
   battery?: string;
   pairedCode?: string;
-  lastSync: string;
+  lastSync?: string;
 }
 
 export interface CartItem {
@@ -135,7 +144,7 @@ export interface Order {
   cashierName: string;
 }
 
-export type PaymentMethod = "Cash" | "UPI" | "Card" | "Wallet" | "Split";
+export type PaymentMethod = "Cash" | "UPI" | "Card" | "Wallet" | "Credit" | "Split";
 
 export interface Sale {
   id: string;

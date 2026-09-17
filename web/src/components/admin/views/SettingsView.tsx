@@ -2,21 +2,15 @@
 
 import React, { useState } from "react";
 import {
-  Building2,
-  Store,
-  Receipt,
-  Shield,
-  Sliders,
-  Check,
-  Save,
-  Printer,
-  Lock,
-  Percent,
-  MapPin,
-  Phone,
-  Mail,
-  FileText,
-} from "lucide-react";
+  IconBuildingStore,
+  IconReceipt,
+  IconShield,
+  IconAdjustmentsHorizontal,
+  IconCheck,
+  IconDeviceFloppy,
+  IconMapPin,
+  IconPhone,
+} from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 
 export const SettingsView: React.FC = () => {
@@ -69,7 +63,7 @@ export const SettingsView: React.FC = () => {
           onClick={handleSave}
           className="h-10 px-4 rounded-xl bg-black hover:bg-zinc-800 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors shrink-0"
         >
-          {savedSuccess ? <Check size={16} className="text-emerald-400" /> : <Save size={16} />}
+          {savedSuccess ? <IconCheck size={16} className="text-emerald-400" /> : <IconDeviceFloppy size={16} />}
           <span>{savedSuccess ? "Preferences Saved!" : "Save Changes"}</span>
         </button>
       </div>
@@ -85,7 +79,7 @@ export const SettingsView: React.FC = () => {
               : "text-gray-600 hover:bg-gray-100 hover:text-black"
           }`}
         >
-          <Building2 size={14} />
+          <IconBuildingStore size={14} />
           <span>Business & Outlets</span>
         </button>
 
@@ -98,7 +92,7 @@ export const SettingsView: React.FC = () => {
               : "text-gray-600 hover:bg-gray-100 hover:text-black"
           }`}
         >
-          <Sliders size={14} />
+          <IconAdjustmentsHorizontal size={14} />
           <span>POS Register Rules</span>
         </button>
 
@@ -111,7 +105,7 @@ export const SettingsView: React.FC = () => {
               : "text-gray-600 hover:bg-gray-100 hover:text-black"
           }`}
         >
-          <Receipt size={14} />
+          <IconReceipt size={14} />
           <span>Thermal Receipts</span>
         </button>
 
@@ -124,7 +118,7 @@ export const SettingsView: React.FC = () => {
               : "text-gray-600 hover:bg-gray-100 hover:text-black"
           }`}
         >
-          <Shield size={14} />
+          <IconShield size={14} />
           <span>Staff Security & Roles</span>
         </button>
       </div>
@@ -208,11 +202,11 @@ export const SettingsView: React.FC = () => {
                     </div>
                     <div className="text-[11px] text-gray-500 space-y-1">
                       <div className="flex items-center gap-1">
-                        <MapPin size={12} className="text-gray-400" />
+                        <IconMapPin size={12} className="text-gray-400" />
                         <span>{out.address}</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Phone size={12} className="text-gray-400" />
+                        <IconPhone size={12} className="text-gray-400" />
                         <span>{out.phone}</span>
                       </div>
                     </div>

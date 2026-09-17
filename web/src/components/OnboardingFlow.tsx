@@ -5,27 +5,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  ArrowLeft,
-  Sparkles,
-  Store,
-  ChevronDown,
-  Check,
-  CheckCircle2,
-  Loader2,
-  Layers,
-  UtensilsCrossed,
-  ShoppingBag,
-  PackageCheck,
-  Bike,
-  Globe,
-  CalendarCheck,
-  Banknote,
-  QrCode,
-  CreditCard,
-  Wallet,
-  Landmark,
-  UserCheck,
-} from "lucide-react";
+  IconArrowLeft,
+  IconBuildingStore,
+  IconChevronDown,
+  IconCheck,
+  IconLoader2,
+  IconLayersLinked,
+  IconToolsKitchen2,
+  IconShoppingBag,
+  IconPackageExport,
+  IconBike,
+  IconWorld,
+  IconCalendarCheck,
+  IconCash,
+  IconQrcode,
+  IconCreditCard,
+  IconWallet,
+  IconBuildingBank,
+  IconUserCheck,
+} from "@tabler/icons-react";
 import * as Flags from "country-flag-icons/react/3x2";
 
 interface OnboardingFlowProps {
@@ -93,14 +91,14 @@ const CURRENCIES = [
 ];
 
 const SELLING_CHANNELS = [
-  { id: "in_store", label: "In-store", icon: Store },
-  { id: "counter", label: "Counter", icon: Layers },
-  { id: "table_service", label: "Table service", icon: UtensilsCrossed },
-  { id: "takeaway", label: "Takeaway", icon: ShoppingBag },
-  { id: "pickup", label: "Pickup", icon: PackageCheck },
-  { id: "delivery", label: "Delivery", icon: Bike },
-  { id: "online_orders", label: "Online orders", icon: Globe },
-  { id: "appointment_service", label: "Appointment / Service", icon: CalendarCheck },
+  { id: "in_store", label: "In-store", icon: IconBuildingStore },
+  { id: "counter", label: "Counter", icon: IconLayersLinked },
+  { id: "table_service", label: "Table service", icon: IconToolsKitchen2 },
+  { id: "takeaway", label: "Takeaway", icon: IconShoppingBag },
+  { id: "pickup", label: "Pickup", icon: IconPackageExport },
+  { id: "delivery", label: "Delivery", icon: IconBike },
+  { id: "online_orders", label: "Online orders", icon: IconWorld },
+  { id: "appointment_service", label: "Appointment / Service", icon: IconCalendarCheck },
 ];
 
 const PAYMENT_METHODS = [
@@ -108,37 +106,37 @@ const PAYMENT_METHODS = [
     id: "cash",
     label: "Cash",
     desc: "Accept cash payments at the counter",
-    icon: Banknote,
+    icon: IconCash,
   },
   {
     id: "upi",
     label: "UPI",
     desc: "Dynamic QR, Google Pay, PhonePe, Paytm",
-    icon: QrCode,
+    icon: IconQrcode,
   },
   {
     id: "card",
     label: "Credit / Debit Card",
     desc: "Swipe, chip, tap & POS card machine",
-    icon: CreditCard,
+    icon: IconCreditCard,
   },
   {
     id: "wallet",
     label: "Wallet",
     desc: "Digital wallet balances & prepaid gift cards",
-    icon: Wallet,
+    icon: IconWallet,
   },
   {
     id: "bank_transfer",
     label: "Bank Transfer",
     desc: "Direct NEFT, RTGS, IMPS wire transfers",
-    icon: Landmark,
+    icon: IconBuildingBank,
   },
   {
     id: "customer_credit",
     label: "Customer Credit",
     desc: "Khata ledger, house accounts & pay later",
-    icon: UserCheck,
+    icon: IconUserCheck,
   },
 ];
 
@@ -347,7 +345,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
               onClick={prevStep}
               className="text-xs sm:text-[13px] font-semibold text-gray-600 hover:text-black flex items-center gap-1 cursor-pointer transition-colors"
             >
-              <ArrowLeft size={14} /> Back
+              <IconArrowLeft size={14} /> Back
             </button>
           )}
           <a
@@ -502,7 +500,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                         }`}
                       >
                         <span>{displayLabel}</span>
-                        <ChevronDown
+                        <IconChevronDown
                           size={14}
                           className={`text-gray-500 transition-transform ${
                             otherDropdownOpen ? "rotate-180 text-black" : ""
@@ -546,7 +544,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                                       <span className="text-base">{item.icon}</span>
                                       <span>{item.label}</span>
                                     </div>
-                                    {isItemActive && <Check size={14} className="text-black shrink-0" />}
+                                    {isItemActive && <IconCheck size={14} className="text-black shrink-0" />}
                                   </button>
                                 );
                               })}
@@ -653,7 +651,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                     className="w-full h-10 sm:h-11 px-4 rounded-full border border-gray-200/90 bg-gray-50/70 hover:bg-gray-100 hover:border-gray-300 flex items-center justify-between text-xs sm:text-sm font-medium text-gray-900 transition-all cursor-pointer"
                   >
                     <span>{businessType || "Cafe"}</span>
-                    <ChevronDown
+                    <IconChevronDown
                       size={14}
                       className={`text-gray-500 transition-transform ${
                         businessTypeDropdownOpen ? "rotate-180 text-black" : ""
@@ -688,7 +686,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                               <span>{item.label}</span>
                             </span>
                             {businessType === item.label && (
-                              <Check size={14} className="text-black shrink-0" />
+                              <IconCheck size={14} className="text-black shrink-0" />
                             )}
                           </button>
                         ))}
@@ -724,7 +722,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                       <span className="text-[11px] font-medium text-gray-700">
                         {selectedPhoneCountry.code}
                       </span>
-                      <ChevronDown size={11} className="text-gray-400" />
+                      <IconChevronDown size={11} className="text-gray-400" />
                     </button>
 
                     {/* Input */}
@@ -815,7 +813,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                     className="w-full h-10 sm:h-11 px-4 rounded-full border border-gray-200/90 bg-gray-50/70 hover:bg-gray-100 hover:border-gray-300 flex items-center justify-between text-xs sm:text-sm font-medium text-gray-900 transition-all cursor-pointer"
                   >
                     <span>{country}</span>
-                    <ChevronDown
+                    <IconChevronDown
                       size={14}
                       className={`text-gray-500 transition-transform ${
                         countryDropdownOpen ? "rotate-180 text-black" : ""
@@ -855,7 +853,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                                 <span>{c.name}</span>
                               </span>
                               {country === c.name && (
-                                <Check size={14} className="text-black shrink-0" />
+                                <IconCheck size={14} className="text-black shrink-0" />
                               )}
                             </button>
                           );
@@ -1016,7 +1014,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                     <span className="text-[11px] font-medium text-gray-700">
                       {selectedOutletPhoneCountry.code}
                     </span>
-                    <ChevronDown size={11} className="text-gray-400" />
+                    <IconChevronDown size={11} className="text-gray-400" />
                   </button>
 
                   {/* Input */}
@@ -1079,7 +1077,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                 >
                   <span className="w-3" />
                   <span className="text-center font-medium text-gray-900">{timeZone}</span>
-                  <ChevronDown
+                  <IconChevronDown
                     size={13}
                     className={`text-gray-400 transition-transform ${
                       timeZoneDropdownOpen ? "rotate-180 text-black" : ""
@@ -1110,7 +1108,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                           }`}
                         >
                           <span>{tz.label}</span>
-                          {timeZone === tz.id && <Check size={13} className="text-black shrink-0" />}
+                          {timeZone === tz.id && <IconCheck size={13} className="text-black shrink-0" />}
                         </button>
                       ))}
                     </div>
@@ -1146,7 +1144,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                       <span className="font-semibold text-gray-800">
                         {selectedCurrency.symbol} {selectedCurrency.code}
                       </span>
-                      <ChevronDown
+                      <IconChevronDown
                         size={11}
                         className={`text-gray-400 transition-transform ${
                           currencyDropdownOpen ? "rotate-180 text-black" : ""
@@ -1204,7 +1202,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                           : "border-gray-300 bg-white"
                       }`}
                     >
-                      {isMainOutlet && <Check size={12} strokeWidth={3} />}
+                      {isMainOutlet && <IconCheck size={12} strokeWidth={3} />}
                     </div>
                     <span className="text-xs sm:text-[13px] font-bold text-gray-900">
                       Main outlet
@@ -1298,7 +1296,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                           : "border-gray-300 bg-white"
                       }`}
                     >
-                      {isSelected && <Check size={12} strokeWidth={3} />}
+                      {isSelected && <IconCheck size={12} strokeWidth={3} />}
                     </div>
                   </button>
                 );
@@ -1375,7 +1373,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                           : "border-gray-300 bg-white"
                       }`}
                     >
-                      {taxEnabled && <Check size={12} strokeWidth={3} />}
+                      {taxEnabled && <IconCheck size={12} strokeWidth={3} />}
                     </div>
                     <span className="text-xs sm:text-[13px] font-semibold text-gray-900">
                       Enable tax
@@ -1857,7 +1855,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                   <>
                     <div className="relative w-9 h-9 mb-1.5 flex items-center justify-center">
                       <div className="w-9 h-9 rounded-full border-2 border-gray-400 border-t-black animate-spin" />
-                      <Store size={16} className="text-gray-900 absolute" />
+                      <IconBuildingStore size={16} className="text-gray-900 absolute" />
                     </div>
                     <div className="text-xs sm:text-[13px] font-bold text-gray-950 mb-0.5">
                       Setting up your admin panel...
@@ -1869,7 +1867,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                 ) : (
                   <>
                     <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center mb-1.5 shadow-sm">
-                      <Check size={18} className="stroke-[3]" />
+                      <IconCheck size={18} className="stroke-[3]" />
                     </div>
                     <div className="text-xs sm:text-[13px] font-bold text-gray-950 mb-0.5">
                       Admin Panel Ready!
@@ -1925,7 +1923,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
             >
               {isRedirecting ? (
                 <span className="flex items-center gap-2">
-                  <Loader2 size={15} className="animate-spin" />
+                  <IconLoader2 size={15} className="animate-spin" />
                   Opening Admin Panel...
                 </span>
               ) : (

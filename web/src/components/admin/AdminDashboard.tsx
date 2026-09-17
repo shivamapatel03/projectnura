@@ -4,23 +4,23 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  LayoutDashboard,
-  ShoppingCart,
-  ReceiptText,
-  ClipboardList,
-  Package,
-  Boxes,
-  Receipt,
-  CreditCard,
-  UserCheck,
-  Monitor,
-  BarChart3,
-  Settings,
-  Bell,
-  ChevronDown,
-  ChevronLeft,
-  Check,
-} from "lucide-react";
+  IconLayoutDashboard,
+  IconReceipt2,
+  IconClipboardList,
+  IconPackage,
+  IconPackages,
+  IconFileInvoice,
+  IconCreditCard,
+  IconUserCheck,
+  IconDeviceDesktop,
+  IconChartBar,
+  IconSettings,
+  IconBell,
+  IconChevronDown,
+  IconChevronLeft,
+  IconCheck,
+  IconSparkles,
+} from "@tabler/icons-react";
 import { AdminProvider, useAdminStore } from "./adminStore";
 import { AdminTab } from "./types";
 
@@ -37,11 +37,11 @@ import { BillingView } from "./views/BillingView";
 import { ReportsView } from "./views/ReportsView";
 import { SettingsView } from "./views/SettingsView";
 
-// Modals
+// Modals & Sidebar
 import { AddProductModal } from "./modals/AddProductModal";
 import { AddStaffModal } from "./modals/AddStaffModal";
 import { AddDeviceModal } from "./modals/AddDeviceModal";
-import { PosTerminalModal } from "./modals/PosTerminalModal";
+import { AiAssistantSidebar } from "./AiAssistantSidebar";
 
 const AdminDashboardContent: React.FC = () => {
   const {
@@ -50,26 +50,25 @@ const AdminDashboardContent: React.FC = () => {
     selectedOutlet,
     setSelectedOutlet,
     outlets,
-    setIsPosModalOpen,
   } = useAdminStore();
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [isOutletDropdownOpen, setIsOutletDropdownOpen] = useState<boolean>(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState<boolean>(false);
+  const [isAiOpen, setIsAiOpen] = useState<boolean>(false);
 
   const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "pos", label: "POS", icon: ShoppingCart },
-    { id: "sales", label: "Sales", icon: ReceiptText },
-    { id: "orders", label: "Orders", icon: ClipboardList },
-    { id: "products", label: "Products", icon: Package },
-    { id: "inventory", label: "Inventory", icon: Boxes },
-    { id: "billing", label: "Billing", icon: Receipt },
-    { id: "payments", label: "Payments", icon: CreditCard },
-    { id: "staff", label: "Staff", icon: UserCheck },
-    { id: "terminals", label: "Terminals", icon: Monitor },
-    { id: "reports", label: "Reports", icon: BarChart3 },
-    { id: "settings", label: "Settings", icon: Settings },
+    { id: "dashboard", label: "Dashboard", icon: IconLayoutDashboard },
+    { id: "sales", label: "Sales", icon: IconReceipt2 },
+    { id: "orders", label: "Orders", icon: IconClipboardList },
+    { id: "products", label: "Products", icon: IconPackage },
+    { id: "inventory", label: "Inventory", icon: IconPackages },
+    { id: "billing", label: "Billing", icon: IconFileInvoice },
+    { id: "payments", label: "Payments", icon: IconCreditCard },
+    { id: "staff", label: "Staff", icon: IconUserCheck },
+    { id: "terminals", label: "Terminals", icon: IconDeviceDesktop },
+    { id: "reports", label: "Reports", icon: IconChartBar },
+    { id: "settings", label: "Settings", icon: IconSettings },
   ];
 
   return (
@@ -117,7 +116,7 @@ const AdminDashboardContent: React.FC = () => {
                 className="w-7 h-7 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-all hover:scale-105 cursor-pointer shrink-0"
                 title="Collapse sidebar"
               >
-                <ChevronLeft size={16} />
+                <IconChevronLeft size={16} />
               </button>
             </div>
           ) : (
@@ -143,7 +142,7 @@ const AdminDashboardContent: React.FC = () => {
                 className="w-7 h-7 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
                 title="Expand sidebar"
               >
-                <ChevronLeft size={16} className="rotate-180" />
+                <IconChevronLeft size={16} className="rotate-180" />
               </button>
             </div>
           )}
@@ -159,13 +158,7 @@ const AdminDashboardContent: React.FC = () => {
                   <button
                     key={item.id}
                     type="button"
-                    onClick={() => {
-                      if (item.id === "pos") {
-                        setIsPosModalOpen(true);
-                      } else {
-                        setActiveTab(item.id as AdminTab);
-                      }
-                    }}
+                    onClick={() => setActiveTab(item.id as AdminTab)}
                     className={`w-full h-9 sm:h-[38px] px-3 rounded-xl text-xs sm:text-[13px] font-medium flex items-center transition-all cursor-pointer relative group outline-none focus:outline-none select-none ${
                       isActive
                         ? "bg-[#212126] text-white font-semibold"
@@ -218,18 +211,18 @@ const AdminDashboardContent: React.FC = () => {
           {/* Right: Outlet & Profile */}
           <div className="flex items-center gap-3 sm:gap-6">
             {/* Outlet Selector */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs sm:text-sm font-semibold text-gray-700 hidden sm:inline">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs sm:text-sm font-medium text-gray-500 hidden sm:inline">
                 Outlet:
               </span>
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setIsOutletDropdownOpen(!isOutletDropdownOpen)}
-                  className="bg-black hover:bg-zinc-800 text-white font-semibold text-xs sm:text-sm px-3.5 py-1.5 rounded-lg flex items-center gap-2 transition-colors cursor-pointer"
+                  className="bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 hover:border-gray-300 font-semibold text-xs sm:text-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
                 >
                   <span>{selectedOutlet.name}</span>
-                  <ChevronDown size={14} />
+                  <IconChevronDown size={14} className="text-gray-500" />
                 </button>
 
                 {isOutletDropdownOpen && (
@@ -255,7 +248,7 @@ const AdminDashboardContent: React.FC = () => {
                           <div>{out.name}</div>
                           <div className="text-[10px] text-gray-400 font-mono">{out.code}</div>
                         </div>
-                        {selectedOutlet.id === out.id && <Check size={14} className="text-black" />}
+                        {selectedOutlet.id === out.id && <IconCheck size={14} className="text-black" />}
                       </button>
                     ))}
                   </div>
@@ -263,13 +256,30 @@ const AdminDashboardContent: React.FC = () => {
               </div>
             </div>
 
+            {/* AI Assistant Button */}
+            <button
+              type="button"
+              onClick={() => setIsAiOpen(true)}
+              className="flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+              aria-label="Open AI Assistant"
+              title="Nuradesk AI"
+            >
+              <Image
+                src="/logo/AI.png"
+                alt="Nuradesk AI"
+                width={32}
+                height={32}
+                className="w-7 h-7 sm:w-[30px] sm:h-[30px] object-contain"
+              />
+            </button>
+
             {/* Notification Bell */}
             <button
               type="button"
               className="w-9 h-9 rounded-full border border-gray-200/90 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-700 transition-colors cursor-pointer relative"
               aria-label="Notifications"
             >
-              <Bell size={16} />
+              <IconBell size={16} />
               <span className="w-2 h-2 rounded-full bg-blue-600 absolute top-2 right-2 ring-2 ring-white" />
             </button>
 
@@ -281,7 +291,7 @@ const AdminDashboardContent: React.FC = () => {
                 className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-gray-900 hover:text-black cursor-pointer px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <span>Rahul</span>
-                <ChevronDown size={14} className="text-gray-500" />
+                <IconChevronDown size={14} className="text-gray-500" />
               </button>
 
               {isProfileDropdownOpen && (
@@ -306,12 +316,12 @@ const AdminDashboardContent: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      setIsPosModalOpen(true);
+                      setActiveTab("terminals");
                       setIsProfileDropdownOpen(false);
                     }}
                     className="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-50 transition-colors"
                   >
-                    Open Live POS (T1)
+                    Terminals & Devices
                   </button>
                   <div className="border-t border-gray-100 my-1" />
                   <Link
@@ -329,32 +339,6 @@ const AdminDashboardContent: React.FC = () => {
         {/* Dashboard Main Workspace */}
         <main className="p-4 sm:p-8 space-y-7 max-w-7xl w-full mx-auto">
           {activeTab === "dashboard" && <DashboardView />}
-
-          {activeTab === "pos" && (
-            <div className="space-y-6 animate-fadeIn">
-              <div className="p-8 rounded-xl bg-white border border-gray-200 text-center space-y-4">
-                <div className="w-12 h-12 rounded-full bg-black text-white mx-auto flex items-center justify-center">
-                  <ShoppingCart size={22} />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-gray-950">POS Terminal Station</h2>
-                  <p className="text-xs text-gray-500 mt-1 max-w-md mx-auto">
-                    Start your cashier shift, take dine-in & takeaway sales, process UPI/Cash, and print thermal tickets.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsPosModalOpen(true)}
-                  className="h-11 px-6 rounded-xl bg-black hover:bg-zinc-800 text-white font-semibold text-xs inline-flex items-center gap-2 cursor-pointer transition-colors"
-                >
-                  <ShoppingCart size={15} />
-                  <span>Open Register Cashier (T1)</span>
-                </button>
-              </div>
-              <TerminalsView />
-            </div>
-          )}
-
           {activeTab === "sales" && <SalesView />}
           {activeTab === "orders" && <OrdersView />}
           {activeTab === "products" && <ProductsView />}
@@ -368,11 +352,11 @@ const AdminDashboardContent: React.FC = () => {
         </main>
       </div>
 
-      {/* Global Modals */}
+      {/* Global Modals & AI Assistant */}
       <AddProductModal />
       <AddStaffModal />
       <AddDeviceModal />
-      <PosTerminalModal />
+      <AiAssistantSidebar isOpen={isAiOpen} onClose={() => setIsAiOpen(false)} />
     </div>
   );
 };

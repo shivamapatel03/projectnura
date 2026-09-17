@@ -2,15 +2,12 @@
 
 import React, { useState } from "react";
 import {
-  Check,
-  ArrowUpRight,
-  ShoppingCart,
-  ChefHat,
-  Utensils,
-  Barcode,
-  Truck,
-  Package,
-} from "lucide-react";
+  IconCheck,
+  IconToolsKitchen2,
+  IconChefHat,
+  IconBarcode,
+  IconTruck,
+} from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 
 const HOURLY_BAR_CHART_DATA = [
@@ -49,7 +46,6 @@ export const DashboardView: React.FC = () => {
     setIsAddProductOpen,
     setIsAddStaffOpen,
     setIsAddDeviceOpen,
-    setIsPosModalOpen,
   } = useAdminStore();
 
   const [chartTimeframe, setChartTimeframe] = useState<"Today" | "Week" | "Month">("Today");
@@ -118,7 +114,7 @@ export const DashboardView: React.FC = () => {
                 </span>
                 {isRequiredCompleted && (
                   <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold flex items-center gap-1">
-                    <Check size={11} className="stroke-[3]" />
+                    <IconCheck size={11} className="stroke-[3]" />
                     <span>Ready to operate</span>
                   </span>
                 )}
@@ -158,7 +154,7 @@ export const DashboardView: React.FC = () => {
                 >
                   {completedSteps.step1 ? (
                     <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
-                      <Check size={12} className="stroke-[3]" />
+                      <IconCheck size={12} className="stroke-[3]" />
                     </div>
                   ) : (
                     <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
@@ -196,7 +192,7 @@ export const DashboardView: React.FC = () => {
                 >
                   {completedSteps.step2 ? (
                     <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
-                      <Check size={12} className="stroke-[3]" />
+                      <IconCheck size={12} className="stroke-[3]" />
                     </div>
                   ) : (
                     <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
@@ -234,7 +230,7 @@ export const DashboardView: React.FC = () => {
                 >
                   {completedSteps.step3 ? (
                     <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
-                      <Check size={12} className="stroke-[3]" />
+                      <IconCheck size={12} className="stroke-[3]" />
                     </div>
                   ) : (
                     <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
@@ -272,7 +268,7 @@ export const DashboardView: React.FC = () => {
                 >
                   {completedSteps.step4 ? (
                     <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
-                      <Check size={12} className="stroke-[3]" />
+                      <IconCheck size={12} className="stroke-[3]" />
                     </div>
                   ) : (
                     <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
@@ -290,12 +286,12 @@ export const DashboardView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => {
-                  setIsPosModalOpen(true);
+                  setActiveTab("terminals");
                   setCompletedSteps((prev) => ({ ...prev, step4: true }));
                 }}
                 className="shrink-0 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 text-gray-900 text-xs font-semibold cursor-pointer transition-colors"
               >
-                Open POS
+                Launch Terminal
               </button>
             </div>
 
@@ -317,7 +313,7 @@ export const DashboardView: React.FC = () => {
                 >
                   {completedSteps.step5 ? (
                     <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
-                      <Check size={12} className="stroke-[3]" />
+                      <IconCheck size={12} className="stroke-[3]" />
                     </div>
                   ) : (
                     <div className="w-5 h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" />
@@ -555,36 +551,14 @@ export const DashboardView: React.FC = () => {
               <span>Showing latest transactions</span>
               <button
                 type="button"
-                onClick={() => setIsPosModalOpen(true)}
+                onClick={() => setActiveTab("sales")}
                 className="font-semibold text-gray-900 hover:underline cursor-pointer"
               >
-                + New POS Sale
+                View Sales Ledger →
               </button>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* QUICK ACCESS: POS CASHIER LAUNCHER BANNER */}
-      <div className="p-6 rounded-xl bg-black text-white flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="space-y-1 text-center md:text-left">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-zinc-800 text-emerald-400 text-xs font-semibold">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Registers Ready</span>
-          </div>
-          <h3 className="text-lg font-bold">Start Cashier Session / POS Register</h3>
-          <p className="text-xs text-zinc-400">
-            Open the POS interface to add cart items, handle dine-in/takeaway, process UPI & print bills.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setIsPosModalOpen(true)}
-          className="h-11 px-6 rounded-xl bg-white hover:bg-zinc-100 text-black font-semibold text-xs flex items-center gap-2 cursor-pointer transition-colors shrink-0"
-        >
-          <ShoppingCart size={16} />
-          <span>Launch POS Register (T1)</span>
-        </button>
       </div>
 
       {/* ADAPTIVE BUSINESS MODULES */}
@@ -608,7 +582,7 @@ export const DashboardView: React.FC = () => {
                 onClick={() => setActiveTab("orders")}
                 className="px-4 py-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200/90 text-gray-900 font-semibold flex items-center gap-2 transition-all cursor-pointer"
               >
-                <Utensils size={15} className="text-amber-600" />
+                <IconToolsKitchen2 size={15} className="text-amber-600" />
                 <span>Tables & Dining</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold ml-1">
                   Floor Map
@@ -620,7 +594,7 @@ export const DashboardView: React.FC = () => {
                 onClick={() => setActiveTab("orders")}
                 className="px-4 py-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200/90 text-gray-900 font-semibold flex items-center gap-2 transition-all cursor-pointer"
               >
-                <ChefHat size={15} className="text-blue-600" />
+                <IconChefHat size={15} className="text-blue-600" />
                 <span>Kitchen Display (KDS)</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold ml-1">
                   Live Tickets
@@ -638,7 +612,7 @@ export const DashboardView: React.FC = () => {
                 onClick={() => setActiveTab("products")}
                 className="px-4 py-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200/90 text-gray-900 font-semibold flex items-center gap-2 transition-all cursor-pointer"
               >
-                <Barcode size={15} className="text-emerald-600" />
+                <IconBarcode size={15} className="text-emerald-600" />
                 <span>Barcode Scanner</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold ml-1">
                   SKU & Laser
@@ -650,7 +624,7 @@ export const DashboardView: React.FC = () => {
                 onClick={() => setActiveTab("inventory")}
                 className="px-4 py-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200/90 text-gray-900 font-semibold flex items-center gap-2 transition-all cursor-pointer"
               >
-                <Truck size={15} className="text-purple-600" />
+                <IconTruck size={15} className="text-purple-600" />
                 <span>Inward Stock & Suppliers</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-bold ml-1">
                   Audit Log

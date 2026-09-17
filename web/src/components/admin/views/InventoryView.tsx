@@ -2,20 +2,16 @@
 
 import React, { useState } from "react";
 import {
-  Boxes,
-  AlertTriangle,
-  ArrowDownRight,
-  ArrowUpRight,
-  Search,
-  Plus,
-  Minus,
-  RotateCcw,
-  SlidersHorizontal,
-  X,
-  History,
-  CheckCircle2,
-  FileText,
-} from "lucide-react";
+  IconPackages,
+  IconAlertTriangle,
+  IconSearch,
+  IconPlus,
+  IconMinus,
+  IconAdjustmentsHorizontal,
+  IconX,
+  IconHistory,
+  IconCircleCheck,
+} from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 import { Product, StockMovement } from "../types";
 
@@ -94,7 +90,7 @@ export const InventoryView: React.FC = () => {
                 : "text-gray-600 hover:text-black"
             }`}
           >
-            <Boxes size={14} />
+            <IconPackages size={14} />
             <span>Stock Catalog</span>
           </button>
           <button
@@ -106,7 +102,7 @@ export const InventoryView: React.FC = () => {
                 : "text-gray-600 hover:text-black"
             }`}
           >
-            <History size={14} />
+            <IconHistory size={14} />
             <span>Audit Trail ({stockMovements.length})</span>
           </button>
         </div>
@@ -135,7 +131,7 @@ export const InventoryView: React.FC = () => {
           }`}
         >
           <div className="text-xs text-amber-700 font-medium flex items-center gap-1">
-            <AlertTriangle size={13} />
+            <IconAlertTriangle size={13} />
             <span>Low Stock Alerts</span>
           </div>
           <div className="text-2xl font-bold text-amber-600 font-mono">{lowStockCount}</div>
@@ -149,7 +145,7 @@ export const InventoryView: React.FC = () => {
           }`}
         >
           <div className="text-xs text-red-600 font-medium flex items-center gap-1">
-            <AlertTriangle size={13} />
+            <IconAlertTriangle size={13} />
             <span>Out of Stock</span>
           </div>
           <div className="text-2xl font-bold text-red-600 font-mono">{outOfStockCount}</div>
@@ -192,7 +188,7 @@ export const InventoryView: React.FC = () => {
               </select>
 
               <div className="relative min-w-[240px]">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <IconSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search item, SKU, barcode..."
@@ -247,17 +243,17 @@ export const InventoryView: React.FC = () => {
                     <td className="py-3.5 px-3 text-center">
                       {p.status === "In Stock" && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          <CheckCircle2 size={11} /> Healthy
+                          <IconCircleCheck size={11} /> Healthy
                         </span>
                       )}
                       {p.status === "Low Stock" && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                          <AlertTriangle size={11} /> Low ({p.stock}/{p.lowStockThreshold})
+                          <IconAlertTriangle size={11} /> Low ({p.stock}/{p.lowStockThreshold})
                         </span>
                       )}
                       {p.status === "Out of Stock" && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200">
-                          <AlertTriangle size={11} /> Out of Stock
+                          <IconAlertTriangle size={11} /> Out of Stock
                         </span>
                       )}
                     </td>
@@ -349,7 +345,7 @@ export const InventoryView: React.FC = () => {
           <div className="bg-white rounded-xl max-w-md w-full border border-gray-200 overflow-hidden shadow-2xl">
             <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal size={17} className="text-gray-700" />
+                <IconAdjustmentsHorizontal size={17} className="text-gray-700" />
                 <span className="font-bold text-gray-900 text-sm">
                   Adjust Stock: {adjustingProduct.name}
                 </span>
@@ -360,7 +356,7 @@ export const InventoryView: React.FC = () => {
                 aria-label="Close stock adjustment"
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-100 transition-colors cursor-pointer"
               >
-                <X size={16} />
+                <IconX size={16} />
               </button>
             </div>
 
@@ -389,7 +385,7 @@ export const InventoryView: React.FC = () => {
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
-                    <Plus size={14} />
+                    <IconPlus size={14} />
                     <span>Add Stock (+)</span>
                   </button>
                   <button
@@ -401,7 +397,7 @@ export const InventoryView: React.FC = () => {
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
-                    <Minus size={14} />
+                    <IconMinus size={14} />
                     <span>Reduce Stock (-)</span>
                   </button>
                 </div>

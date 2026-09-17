@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { IconCheck } from "@tabler/icons-react";
 import { PRICING_TIERS } from "@/lib/data";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -140,7 +140,7 @@ export const PricingSection: React.FC = () => {
                   </span>
                   {tier.features.map((feat, idx) => (
                     <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-700">
-                      <Check size={16} className="text-black shrink-0 mt-0.5" strokeWidth={2.5} />
+                      <IconCheck size={16} className="text-black shrink-0 mt-0.5" stroke={2.5} />
                       <span>{feat}</span>
                     </div>
                   ))}

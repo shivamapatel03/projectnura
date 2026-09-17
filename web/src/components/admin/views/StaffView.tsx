@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, Search, Shield, Key, Clock, UserCheck, Trash2, Edit } from "lucide-react";
+import { IconPlus, IconSearch, IconKey, IconTrash } from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 
 export const StaffView: React.FC = () => {
@@ -35,7 +35,7 @@ export const StaffView: React.FC = () => {
           onClick={() => setIsAddStaffOpen(true)}
           className="h-10 px-4 rounded-xl bg-black hover:bg-zinc-800 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors shrink-0"
         >
-          <Plus size={16} />
+          <IconPlus size={16} />
           <span>Add Staff Member</span>
         </button>
       </div>
@@ -72,7 +72,7 @@ export const StaffView: React.FC = () => {
         {/* Search & Filter */}
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between pb-4 border-b border-gray-100">
           <div className="relative flex-1 max-w-md">
-            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+            <IconSearch size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search by staff name, email, or role..."
@@ -177,7 +177,7 @@ export const StaffView: React.FC = () => {
                           className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400 hover:text-black transition-colors"
                           title="Change PIN"
                         >
-                          <Key size={13} />
+                          <IconKey size={13} />
                         </button>
                         {s.role !== "Owner" && (
                           <button
@@ -190,7 +190,7 @@ export const StaffView: React.FC = () => {
                             className="p-1.5 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors"
                             title="Delete staff"
                           >
-                            <Trash2 size={13} />
+                            <IconTrash size={13} />
                           </button>
                         )}
                       </div>

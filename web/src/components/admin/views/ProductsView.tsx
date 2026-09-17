@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, Search, Filter, Tag, AlertTriangle, CheckCircle2, Trash2, Edit2, Package } from "lucide-react";
+import { IconPlus, IconSearch, IconAlertTriangle, IconTrash, IconEdit, IconPackage } from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 
 export const ProductsView: React.FC = () => {
@@ -48,7 +48,7 @@ export const ProductsView: React.FC = () => {
           onClick={() => setIsAddProductOpen(true)}
           className="h-10 px-4 rounded-xl bg-black hover:bg-zinc-800 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors shrink-0"
         >
-          <Plus size={16} />
+          <IconPlus size={16} />
           <span>Add New Product</span>
         </button>
       </div>
@@ -72,7 +72,7 @@ export const ProductsView: React.FC = () => {
           }`}
         >
           <div className="text-xs text-amber-700 font-medium flex items-center gap-1">
-            <AlertTriangle size={13} />
+            <IconAlertTriangle size={13} />
             <span>Low Stock Items</span>
           </div>
           <div className="text-2xl font-bold text-amber-600 font-mono">{lowStockCount}</div>
@@ -84,7 +84,7 @@ export const ProductsView: React.FC = () => {
           }`}
         >
           <div className="text-xs text-red-600 font-medium flex items-center gap-1">
-            <AlertTriangle size={13} />
+            <IconAlertTriangle size={13} />
             <span>Out of Stock</span>
           </div>
           <div className="text-2xl font-bold text-red-600 font-mono">{outOfStockCount}</div>
@@ -96,7 +96,7 @@ export const ProductsView: React.FC = () => {
         {/* Search & Category Filter Row */}
         <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between pb-4 border-b border-gray-100">
           <div className="relative flex-1 max-w-md">
-            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+            <IconSearch size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search product name, SKU, or barcode..."
@@ -147,18 +147,36 @@ export const ProductsView: React.FC = () => {
                 return (
                   <tr key={p.id} className="hover:bg-gray-50/70 transition-colors group">
                     <td className="py-3.5 pl-1">
-                      <div className="font-bold text-gray-950 text-xs sm:text-sm">{p.name}</div>
-                      <div className="flex items-center gap-2 text-[11px] text-gray-500 mt-0.5">
-                        {p.kitchenStation && (
-                          <span className="px-1.5 py-0.2 rounded bg-gray-100 text-gray-600 font-mono text-[10px]">
-                            {p.kitchenStation}
-                          </span>
+                      <div className="flex items-center gap-3">
+                        {p.image ? (
+                          <img
+                            src={p.image}
+                            alt={p.name}
+                            className="w-10 h-10 rounded-lg object-cover border border-gray-200 shrink-0 shadow-2xs"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-500 font-bold text-xs uppercase shrink-0">
+                            {p.name.slice(0, 2)}
+                          </div>
                         )}
-                        {p.variants && (
-                          <span className="text-gray-400">
-                            {p.variants.length} variant{p.variants.length > 1 ? "s" : ""}
-                          </span>
-                        )}
+                        <div>
+                          <div className="font-bold text-gray-950 text-xs sm:text-sm">{p.name}</div>
+                          <div className="flex items-center gap-2 text-[11px] text-gray-500 mt-0.5">
+                            {p.kitchenStation && (
+                              <span className="px-1.5 py-0.2 rounded bg-gray-100 text-gray-600 font-mono text-[10px]">
+                                {p.kitchenStation}
+                              </span>
+                            )}
+                            {p.variants && (
+                              <span className="text-gray-400">
+                                {p.variants.length} variant{p.variants.length > 1 ? "s" : ""}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </td>
 
@@ -217,7 +235,7 @@ export const ProductsView: React.FC = () => {
                           className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400 hover:text-black transition-colors"
                           title="Quick edit price"
                         >
-                          <Edit2 size={13} />
+                          <IconEdit size={13} />
                         </button>
                         <button
                           type="button"
@@ -229,7 +247,7 @@ export const ProductsView: React.FC = () => {
                           className="p-1.5 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors"
                           title="Delete product"
                         >
-                          <Trash2 size={13} />
+                          <IconTrash size={13} />
                         </button>
                       </div>
                     </td>
@@ -241,7 +259,7 @@ export const ProductsView: React.FC = () => {
                 <tr>
                   <td colSpan={9} className="py-8 text-center text-gray-400">
                     <div className="flex flex-col items-center justify-center gap-1">
-                      <Package size={24} className="stroke-1 text-gray-300" />
+                      <IconPackage size={24} className="stroke-1 text-gray-300" />
                       <span>No products found matching your search.</span>
                     </div>
                   </td>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, ShieldCheck, KeyRound, User, Mail, Phone, Store } from "lucide-react";
+import { IconX, IconShieldCheck, IconKey, IconUser, IconMail, IconPhone, IconBuildingStore } from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 import { StaffRole } from "../types";
 
@@ -75,7 +75,7 @@ export const AddStaffModal: React.FC = () => {
             onClick={() => setIsAddStaffOpen(false)}
             className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-900"
           >
-            <X size={18} />
+            <IconX size={18} />
           </button>
         </div>
 
@@ -93,7 +93,7 @@ export const AddStaffModal: React.FC = () => {
             <div className="space-y-3.5">
               <div className="space-y-1.5">
                 <label className="font-semibold text-gray-900 flex items-center gap-1.5">
-                  <User size={13} />
+                  <IconUser size={13} />
                   <span>Full Name *</span>
                 </label>
                 <input
@@ -108,7 +108,7 @@ export const AddStaffModal: React.FC = () => {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-gray-900 flex items-center gap-1.5">
-                  <Mail size={13} />
+                  <IconMail size={13} />
                   <span>Email Address</span>
                 </label>
                 <input
@@ -122,7 +122,7 @@ export const AddStaffModal: React.FC = () => {
 
               <div className="space-y-1.5">
                 <label className="font-semibold text-gray-900 flex items-center gap-1.5">
-                  <Phone size={13} />
+                  <IconPhone size={13} />
                   <span>Phone Number</span>
                 </label>
                 <input
@@ -162,7 +162,7 @@ export const AddStaffModal: React.FC = () => {
 
               <div className="space-y-2">
                 <label className="font-semibold text-gray-900 flex items-center gap-1.5">
-                  <Store size={13} />
+                  <IconBuildingStore size={13} />
                   <span>Accessible Outlets</span>
                 </label>
                 <div className="space-y-1.5 max-h-36 overflow-y-auto">
@@ -194,7 +194,7 @@ export const AddStaffModal: React.FC = () => {
           {step === 3 && (
             <div className="space-y-3">
               <div className="font-semibold text-gray-900 flex items-center gap-1.5">
-                <ShieldCheck size={14} />
+                <IconShieldCheck size={14} />
                 <span>Security Permissions</span>
               </div>
               <div className="space-y-2">
@@ -251,7 +251,7 @@ export const AddStaffModal: React.FC = () => {
             <div className="space-y-4">
               <div className="p-4 rounded-xl border border-gray-200 bg-gray-50/70 text-center space-y-2">
                 <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center mx-auto">
-                  <KeyRound size={18} />
+                  <IconKey size={18} />
                 </div>
                 <div className="font-bold text-gray-950 text-sm">Set 4-Digit POS Fast PIN</div>
                 <p className="text-gray-500 text-xs">

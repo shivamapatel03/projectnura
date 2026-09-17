@@ -2,19 +2,12 @@
 
 import React, { useState } from "react";
 import {
-  BarChart3,
-  TrendingUp,
-  Download,
-  Calendar,
-  Layers,
-  Award,
-  Clock,
-  CheckCircle2,
-  AlertTriangle,
-  PieChart,
-  DollarSign,
-  ShoppingBag,
-} from "lucide-react";
+  IconChartBar,
+  IconDownload,
+  IconAward,
+  IconClock,
+  IconCircleCheck,
+} from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 
 export const ReportsView: React.FC = () => {
@@ -117,7 +110,7 @@ export const ReportsView: React.FC = () => {
             onClick={handleExportCSV}
             className="h-10 px-3.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors"
           >
-            <Download size={15} />
+            <IconDownload size={15} />
             <span className="hidden sm:inline">Export Report</span>
           </button>
         </div>
@@ -167,7 +160,7 @@ export const ReportsView: React.FC = () => {
               : "text-gray-600 hover:bg-gray-100 hover:text-black"
           }`}
         >
-          <BarChart3 size={14} />
+          <IconChartBar size={14} />
           <span>Sales & Payment Mix</span>
         </button>
         <button
@@ -179,7 +172,7 @@ export const ReportsView: React.FC = () => {
               : "text-gray-600 hover:bg-gray-100 hover:text-black"
           }`}
         >
-          <Award size={14} />
+          <IconAward size={14} />
           <span>Product Velocity</span>
         </button>
         <button
@@ -191,7 +184,7 @@ export const ReportsView: React.FC = () => {
               : "text-gray-600 hover:bg-gray-100 hover:text-black"
           }`}
         >
-          <Clock size={14} />
+          <IconClock size={14} />
           <span>Register Shift Audit</span>
         </button>
       </div>
@@ -363,7 +356,7 @@ export const ReportsView: React.FC = () => {
                     </td>
                     <td className="py-3.5 px-3 text-center">
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        <CheckCircle2 size={11} /> Shift Active
+                        <IconCircleCheck size={11} /> Shift Active
                       </span>
                     </td>
                   </tr>

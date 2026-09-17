@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ShieldCheck, Check, KeyRound, ArrowLeft } from "lucide-react";
+import { IconShieldCheck, IconCheck, IconKey, IconArrowLeft } from "@tabler/icons-react";
 
 export const AuthenticatorPage: React.FC = () => {
   const router = useRouter();
@@ -107,7 +107,7 @@ export const AuthenticatorPage: React.FC = () => {
             href="/login"
             className="text-xs sm:text-[13px] font-semibold text-gray-600 hover:text-black flex items-center gap-1 transition-colors"
           >
-            <ArrowLeft size={13} /> Sign In
+            <IconArrowLeft size={13} /> Sign In
           </Link>
           <a
             href="mailto:support@nuradesk.com"
@@ -123,7 +123,7 @@ export const AuthenticatorPage: React.FC = () => {
         <div className="w-full max-w-[380px] sm:max-w-[420px] my-auto">
           {/* Security Icon Badge */}
           <div className="w-12 h-12 rounded-2xl bg-gray-100 text-gray-950 flex items-center justify-center mx-auto mb-3">
-            <ShieldCheck size={26} className="text-black" />
+            <IconShieldCheck size={26} className="text-black" />
           </div>
 
           {/* Screen Title */}
@@ -141,7 +141,7 @@ export const AuthenticatorPage: React.FC = () => {
           {/* Success Banner */}
           {verified && (
             <div className="mb-4 p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-medium flex items-center justify-center gap-2">
-              <Check size={16} className="text-emerald-600 shrink-0" />
+              <IconCheck size={16} className="text-emerald-600 shrink-0" />
               <span>Identity verified! Accessing Admin Panel...</span>
             </div>
           )}
@@ -227,7 +227,7 @@ export const AuthenticatorPage: React.FC = () => {
               }}
               className="font-medium text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1 cursor-pointer"
             >
-              <KeyRound size={13} />
+              <IconKey size={13} />
               {useBackupCode
                 ? "Use 6-digit Authenticator app code"
                 : "Lost access to authenticator? Use backup code"}

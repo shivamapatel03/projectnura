@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { IconCircleCheck } from "@tabler/icons-react";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export const UpdatesSection: React.FC = () => {
@@ -27,7 +27,7 @@ export const UpdatesSection: React.FC = () => {
 
         {submitted ? (
           <div className="mt-6 p-3.5 rounded-full bg-gray-100 border border-gray-300 text-black text-sm font-semibold flex items-center justify-center gap-2 max-w-sm mx-auto">
-            <CheckCircle2 size={18} />
+            <IconCircleCheck size={18} />
             <span>Thank you! You are subscribed.</span>
           </div>
         ) : (

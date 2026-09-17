@@ -2,25 +2,25 @@
 
 import React, { useState } from "react";
 import {
-  Search,
-  Receipt,
-  Download,
-  RotateCcw,
-  ArrowUpRight,
-  Printer,
-  X,
-  CreditCard,
-  Banknote,
-  Smartphone,
-  CheckCircle2,
-  AlertCircle,
-  ExternalLink,
-} from "lucide-react";
+  IconSearch,
+  IconReceipt,
+  IconDownload,
+  IconRotate2,
+  IconArrowUpRight,
+  IconPrinter,
+  IconX,
+  IconCreditCard,
+  IconCash,
+  IconDeviceMobile,
+  IconCircleCheck,
+  IconAlertCircle,
+  IconDeviceDesktop,
+} from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 import { Sale } from "../types";
 
 export const SalesView: React.FC = () => {
-  const { sales, refundSale, selectedSaleDetail, setSelectedSaleDetail, setIsPosModalOpen } =
+  const { sales, refundSale, selectedSaleDetail, setSelectedSaleDetail, setActiveTab } =
     useAdminStore();
 
   const [statusFilter, setStatusFilter] = useState<"All" | "Completed" | "Refunded" | "Voided">("All");
@@ -85,16 +85,16 @@ export const SalesView: React.FC = () => {
             onClick={handleExportCSV}
             className="h-10 px-3.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors"
           >
-            <Download size={15} />
+            <IconDownload size={15} />
             <span>Export CSV</span>
           </button>
           <button
             type="button"
-            onClick={() => setIsPosModalOpen(true)}
+            onClick={() => setActiveTab("terminals")}
             className="h-10 px-4 rounded-xl bg-black hover:bg-zinc-800 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors shrink-0"
           >
-            <Receipt size={16} />
-            <span>Open POS Cashier</span>
+            <IconDeviceDesktop size={16} />
+            <span>Launch Terminal</span>
           </button>
         </div>
       </div>
@@ -119,7 +119,7 @@ export const SalesView: React.FC = () => {
         </div>
         <div className="p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1">
           <div className="text-xs text-amber-700 font-medium flex items-center gap-1">
-            <RotateCcw size={13} />
+            <IconRotate2 size={13} />
             <span>Refunded Value</span>
           </div>
           <div className="text-2xl font-bold text-amber-600 font-mono">
@@ -166,7 +166,7 @@ export const SalesView: React.FC = () => {
 
             {/* Search Input */}
             <div className="relative min-w-[240px]">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <IconSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search invoice, customer, phone..."
@@ -198,7 +198,7 @@ export const SalesView: React.FC = () => {
               {filteredSales.length === 0 ? (
                 <tr>
                   <td colSpan={9} className="py-12 text-center text-gray-400">
-                    <Receipt size={32} className="mx-auto mb-2 opacity-30" />
+                    <IconReceipt size={32} className="mx-auto mb-2 opacity-30" />
                     No transactions found matching your filters.
                   </td>
                 </tr>
@@ -211,7 +211,7 @@ export const SalesView: React.FC = () => {
                   >
                     <td className="py-3.5 px-3 font-mono font-semibold text-gray-950 flex items-center gap-1.5">
                       <span>{sale.invoiceNumber}</span>
-                      <ArrowUpRight
+                      <IconArrowUpRight
                         size={13}
                         className="opacity-0 group-hover:opacity-100 text-gray-400 transition-opacity"
                       />
@@ -237,9 +237,9 @@ export const SalesView: React.FC = () => {
                     </td>
                     <td className="py-3.5 px-3">
                       <span className="inline-flex items-center gap-1 text-gray-700">
-                        {sale.paymentMethod === "UPI" && <Smartphone size={13} className="text-purple-600" />}
-                        {sale.paymentMethod === "Cash" && <Banknote size={13} className="text-emerald-600" />}
-                        {sale.paymentMethod === "Card" && <CreditCard size={13} className="text-blue-600" />}
+                        {sale.paymentMethod === "UPI" && <IconDeviceMobile size={13} className="text-purple-600" />}
+                        {sale.paymentMethod === "Cash" && <IconCash size={13} className="text-emerald-600" />}
+                        {sale.paymentMethod === "Card" && <IconCreditCard size={13} className="text-blue-600" />}
                         <span className="font-medium">{sale.paymentMethod}</span>
                       </span>
                     </td>
@@ -249,17 +249,17 @@ export const SalesView: React.FC = () => {
                     <td className="py-3.5 px-3 text-center">
                       {sale.status === "Completed" && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          <CheckCircle2 size={11} /> Completed
+                          <IconCircleCheck size={11} /> Completed
                         </span>
                       )}
                       {sale.status === "Refunded" && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                          <RotateCcw size={11} /> Refunded
+                          <IconRotate2 size={11} /> Refunded
                         </span>
                       )}
                       {sale.status === "Voided" && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200">
-                          <AlertCircle size={11} /> Voided
+                          <IconAlertCircle size={11} /> Voided
                         </span>
                       )}
                     </td>
@@ -300,7 +300,7 @@ export const SalesView: React.FC = () => {
             {/* Drawer Header */}
             <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
               <div className="flex items-center gap-2">
-                <Receipt size={17} className="text-gray-700" />
+                <IconReceipt size={17} className="text-gray-700" />
                 <span className="font-bold text-gray-900 text-sm">
                   Invoice Details: {selectedSaleDetail.invoiceNumber}
                 </span>
@@ -311,7 +311,7 @@ export const SalesView: React.FC = () => {
                 aria-label="Close invoice details"
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-black hover:bg-gray-100 transition-colors cursor-pointer"
               >
-                <X size={16} />
+                <IconX size={16} />
               </button>
             </div>
 
@@ -461,7 +461,7 @@ export const SalesView: React.FC = () => {
                   onClick={() => window.print()}
                   className="px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100 border border-gray-200 cursor-pointer flex items-center gap-1.5 transition-colors"
                 >
-                  <Printer size={14} />
+                  <IconPrinter size={14} />
                   <span>Print Receipt</span>
                 </button>
                 <button

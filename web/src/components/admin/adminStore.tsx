@@ -37,8 +37,10 @@ interface AdminContextType {
 
   // Devices / Terminals
   devices: Device[];
-  addDevice: (device: Omit<Device, "id" | "lastSync">) => void;
+  addDevice: (device: Omit<Device, "id">) => Device;
+  updateDevice: (id: string, updates: Partial<Device>) => void;
   updateDeviceStatus: (id: string, status: Device["status"]) => void;
+  deleteDevice: (id: string) => void;
 
   // Orders
   orders: Order[];
@@ -132,6 +134,7 @@ const INITIAL_PRODUCTS: Product[] = [
     taxRate: 5,
     sku: "BEV-CAP-001",
     barcode: "89012345001",
+    image: "https://images.unsplash.com/photo-1572442388796-11668ba67e53?w=400&q=80",
     inventoryTracking: true,
     stock: 145,
     lowStockThreshold: 20,
@@ -163,6 +166,7 @@ const INITIAL_PRODUCTS: Product[] = [
     taxRate: 5,
     sku: "FD-TRF-002",
     barcode: "89012345002",
+    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80",
     inventoryTracking: true,
     stock: 42,
     lowStockThreshold: 10,
@@ -189,6 +193,7 @@ const INITIAL_PRODUCTS: Product[] = [
     taxRate: 5,
     sku: "BAK-CRS-003",
     barcode: "89012345003",
+    image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&q=80",
     inventoryTracking: true,
     stock: 18,
     lowStockThreshold: 15,
@@ -205,6 +210,7 @@ const INITIAL_PRODUCTS: Product[] = [
     taxRate: 5,
     sku: "BEV-MTC-004",
     barcode: "89012345004",
+    image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=400&q=80",
     inventoryTracking: true,
     stock: 8,
     lowStockThreshold: 12,
@@ -221,6 +227,7 @@ const INITIAL_PRODUCTS: Product[] = [
     taxRate: 5,
     sku: "BEV-CLD-005",
     barcode: "89012345005",
+    image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=400&q=80",
     inventoryTracking: true,
     stock: 55,
     lowStockThreshold: 15,
@@ -237,6 +244,7 @@ const INITIAL_PRODUCTS: Product[] = [
     taxRate: 5,
     sku: "BRN-AVO-006",
     barcode: "89012345006",
+    image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&q=80",
     inventoryTracking: true,
     stock: 32,
     lowStockThreshold: 10,
@@ -253,6 +261,7 @@ const INITIAL_PRODUCTS: Product[] = [
     taxRate: 5,
     sku: "DES-GEL-007",
     barcode: "89012345007",
+    image: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400&q=80",
     inventoryTracking: true,
     stock: 24,
     lowStockThreshold: 10,
@@ -269,6 +278,7 @@ const INITIAL_PRODUCTS: Product[] = [
     taxRate: 12,
     sku: "RTL-COF-008",
     barcode: "89012345008",
+    image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&q=80",
     inventoryTracking: true,
     stock: 35,
     lowStockThreshold: 8,
@@ -367,76 +377,64 @@ const INITIAL_DEVICES: Device[] = [
   {
     id: "dev-1",
     code: "T1",
-    name: "T1 — Main Counter POS",
+    name: "Counter POS 1",
     type: "POS Terminal",
     outletId: "out-1",
     outletName: "Main Branch",
     status: "Online",
+    lastActive: "Just now",
+    createdDate: "17 Sep 2026",
+    pairingCode: "NURA-84KF",
+    hardware: {
+      receiptPrinter: "Connected",
+      cashDrawer: "Connected",
+      customerDisplay: "Not Connected",
+    },
     ip: "192.168.1.101",
-    battery: "100% (AC)",
-    pairedCode: "ND-9182",
-    lastSync: "Just now",
   },
   {
     id: "dev-2",
     code: "T2",
-    name: "T2 — Drive-Thru / Takeaway",
+    name: "Counter POS 2",
     type: "POS Terminal",
     outletId: "out-1",
     outletName: "Main Branch",
-    status: "Online",
+    status: "Offline",
+    lastActive: "2 hours ago",
+    createdDate: "17 Sep 2026",
+    pairingCode: "NURA-22XQ",
+    hardware: {
+      receiptPrinter: "Connected",
+      cashDrawer: "Connected",
+      customerDisplay: "Not Connected",
+    },
     ip: "192.168.1.102",
-    battery: "94%",
-    pairedCode: "ND-4412",
-    lastSync: "2m ago",
   },
   {
     id: "dev-3",
     code: "K1",
-    name: "K1 — Main Kitchen Display",
+    name: "Main Kitchen",
     type: "Kitchen Display",
     outletId: "out-1",
     outletName: "Main Branch",
     status: "Online",
+    lastActive: "1 min ago",
+    createdDate: "17 Sep 2026",
+    pairingCode: "NURA-99KT",
     ip: "192.168.1.105",
-    pairedCode: "ND-8831",
-    lastSync: "Just now",
   },
   {
     id: "dev-4",
     code: "CD1",
-    name: "CD1 — Customer Facing Screen",
+    name: "Customer Display 1",
     type: "Customer Display",
     outletId: "out-1",
     outletName: "Main Branch",
     status: "Online",
+    lastActive: "5 mins ago",
+    createdDate: "17 Sep 2026",
+    pairingCode: "NURA-31CD",
     ip: "192.168.1.108",
-    pairedCode: "ND-6610",
-    lastSync: "5m ago",
-  },
-  {
-    id: "dev-5",
-    code: "P1",
-    name: "P1 — 80mm Receipt Printer",
-    type: "Receipt Printer",
-    outletId: "out-1",
-    outletName: "Main Branch",
-    status: "Online",
-    ip: "192.168.1.110",
-    pairedCode: "ND-2299",
-    lastSync: "Ready",
-  },
-  {
-    id: "dev-6",
-    code: "D1",
-    name: "D1 — Automatic Cash Drawer",
-    type: "Cash Drawer",
-    outletId: "out-1",
-    outletName: "Main Branch",
-    status: "Online",
-    ip: "Port: RJ12 P1",
-    pairedCode: "ND-0012",
-    lastSync: "Closed",
   },
 ];
 
@@ -794,20 +792,33 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   // Device Actions
-  const addDevice = (newDev: Omit<Device, "id" | "lastSync">) => {
+  const addDevice = (newDev: Omit<Device, "id">): Device => {
     const id = `dev-${Date.now()}`;
     const device: Device = {
       ...newDev,
       id,
-      lastSync: "Just paired",
+      lastActive: newDev.lastActive || "Just now",
+      createdDate: newDev.createdDate || "17 Sep 2026",
+      status: newDev.status || "Online",
     };
     setDevices((prev) => [...prev, device]);
+    return device;
+  };
+
+  const updateDevice = (id: string, updates: Partial<Device>) => {
+    setDevices((prev) =>
+      prev.map((d) => (d.id === id ? { ...d, ...updates } : d))
+    );
   };
 
   const updateDeviceStatus = (id: string, status: Device["status"]) => {
     setDevices((prev) =>
-      prev.map((d) => (d.id === id ? { ...d, status, lastSync: "Just now" } : d))
+      prev.map((d) => (d.id === id ? { ...d, status, lastActive: "Just now" } : d))
     );
+  };
+
+  const deleteDevice = (id: string) => {
+    setDevices((prev) => prev.filter((d) => d.id !== id));
   };
 
   // Order Actions
@@ -1039,7 +1050,9 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         deleteStaff,
         devices,
         addDevice,
+        updateDevice,
         updateDeviceStatus,
+        deleteDevice,
         orders,
         createOrder,
         updateOrderStatus,

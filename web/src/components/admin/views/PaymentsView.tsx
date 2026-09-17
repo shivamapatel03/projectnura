@@ -2,20 +2,17 @@
 
 import React, { useState } from "react";
 import {
-  CreditCard,
-  Banknote,
-  Smartphone,
-  Wallet,
-  Search,
-  CheckCircle2,
-  RotateCcw,
-  AlertCircle,
-  Download,
-  Calendar,
-  Layers,
-  ArrowUpRight,
-  ShieldCheck,
-} from "lucide-react";
+  IconCreditCard,
+  IconCash,
+  IconDeviceMobile,
+  IconWallet,
+  IconSearch,
+  IconCircleCheck,
+  IconRotate2,
+  IconAlertCircle,
+  IconDownload,
+  IconShieldCheck,
+} from "@tabler/icons-react";
 import { useAdminStore } from "../adminStore";
 import { PaymentMethod } from "../types";
 
@@ -89,7 +86,7 @@ export const PaymentsView: React.FC = () => {
             onClick={handleExportCSV}
             className="h-10 px-3.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-semibold flex items-center gap-2 cursor-pointer transition-colors"
           >
-            <Download size={15} />
+            <IconDownload size={15} />
             <span>Export Transactions</span>
           </button>
         </div>
@@ -103,14 +100,14 @@ export const PaymentsView: React.FC = () => {
             ₹{totalCollected.toLocaleString()}
           </div>
           <div className="text-[11px] text-emerald-600 flex items-center gap-1">
-            <ShieldCheck size={12} />
+            <IconShieldCheck size={12} />
             <span>Auto-reconciliation active</span>
           </div>
         </div>
 
         <div className="p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1">
           <div className="text-xs text-emerald-700 font-medium flex items-center gap-1">
-            <Banknote size={13} />
+            <IconCash size={13} />
             <span>Cash in Drawer</span>
           </div>
           <div className="text-2xl font-bold text-emerald-600 font-mono">
@@ -121,7 +118,7 @@ export const PaymentsView: React.FC = () => {
 
         <div className="p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1">
           <div className="text-xs text-purple-700 font-medium flex items-center gap-1">
-            <Smartphone size={13} />
+            <IconDeviceMobile size={13} />
             <span>Digital (UPI + Cards)</span>
           </div>
           <div className="text-2xl font-bold text-purple-700 font-mono">
@@ -132,7 +129,7 @@ export const PaymentsView: React.FC = () => {
 
         <div className="p-4 rounded-xl bg-white border border-gray-200/90 shadow-none space-y-1">
           <div className="text-xs text-amber-700 font-medium flex items-center gap-1">
-            <RotateCcw size={13} />
+            <IconRotate2 size={13} />
             <span>Total Refunds</span>
           </div>
           <div className="text-2xl font-bold text-amber-600 font-mono">
@@ -178,7 +175,7 @@ export const PaymentsView: React.FC = () => {
 
             {/* Search Input */}
             <div className="relative min-w-[240px]">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <IconSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search Txn ID, Invoice, Customer..."
@@ -209,7 +206,7 @@ export const PaymentsView: React.FC = () => {
               {filteredPayments.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-gray-400">
-                    <CreditCard size={32} className="mx-auto mb-2 opacity-30" />
+                    <IconCreditCard size={32} className="mx-auto mb-2 opacity-30" />
                     No payment records found.
                   </td>
                 </tr>
@@ -229,10 +226,10 @@ export const PaymentsView: React.FC = () => {
                     <td className="py-3.5 px-3 font-medium text-gray-900">{pay.customer}</td>
                     <td className="py-3.5 px-3">
                       <span className="inline-flex items-center gap-1 text-gray-800">
-                        {pay.method === "UPI" && <Smartphone size={13} className="text-purple-600" />}
-                        {pay.method === "Cash" && <Banknote size={13} className="text-emerald-600" />}
-                        {pay.method === "Card" && <CreditCard size={13} className="text-blue-600" />}
-                        {pay.method === "Wallet" && <Wallet size={13} className="text-amber-600" />}
+                        {pay.method === "UPI" && <IconDeviceMobile size={13} className="text-purple-600" />}
+                        {pay.method === "Cash" && <IconCash size={13} className="text-emerald-600" />}
+                        {pay.method === "Card" && <IconCreditCard size={13} className="text-blue-600" />}
+                        {pay.method === "Wallet" && <IconWallet size={13} className="text-amber-600" />}
                         <span className="font-semibold">{pay.method}</span>
                       </span>
                     </td>
@@ -245,17 +242,17 @@ export const PaymentsView: React.FC = () => {
                     <td className="py-3.5 px-3 text-center">
                       {pay.status === "Success" && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          <CheckCircle2 size={11} /> Settled
+                          <IconCircleCheck size={11} /> Settled
                         </span>
                       )}
                       {pay.status === "Refunded" && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                          <RotateCcw size={11} /> Refunded
+                          <IconRotate2 size={11} /> Refunded
                         </span>
                       )}
                       {pay.status === "Failed" && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200">
-                          <AlertCircle size={11} /> Failed
+                          <IconAlertCircle size={11} /> Failed
                         </span>
                       )}
                     </td>

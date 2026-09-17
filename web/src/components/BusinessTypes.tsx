@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { ArrowUpRight, ArrowLeft, ArrowRight } from "lucide-react";
+import { IconArrowUpRight, IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { BUSINESS_TYPES } from "@/lib/data";
 
 import ScrollReveal from "@/components/ScrollReveal";
@@ -81,7 +81,7 @@ export const BusinessTypes: React.FC = () => {
 
                 {/* Circular Action Button with 3D Button-20 Finish */}
                 <div className="button-20 !p-0 w-11 h-11 !rounded-full text-white flex items-center justify-center transition-all duration-200 group-hover:scale-110 shrink-0 ml-3 cursor-pointer">
-                  <ArrowUpRight size={20} strokeWidth={2.5} />
+                  <IconArrowUpRight size={20} stroke={2.5} />
                 </div>
               </div>
             </div>
@@ -96,14 +96,14 @@ export const BusinessTypes: React.FC = () => {
           aria-label="Previous Category"
           className="w-11 h-11 rounded-full border border-gray-300 bg-white text-gray-700 hover:text-gray-950 hover:border-gray-900 flex items-center justify-center transition-colors"
         >
-          <ArrowLeft size={18} />
+          <IconArrowLeft size={18} />
         </button>
         <button
           onClick={handleNext}
           aria-label="Next Category"
           className="w-11 h-11 rounded-full border border-gray-300 bg-white text-gray-700 hover:text-gray-950 hover:border-gray-900 flex items-center justify-center transition-colors"
         >
-          <ArrowRight size={18} />
+          <IconArrowRight size={18} />
         </button>
       </div>
     </section>
